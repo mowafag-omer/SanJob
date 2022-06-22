@@ -1,5 +1,6 @@
 import config from "./constants";
 import { DataSource } from "typeorm";
+import { entities } from "../modules";
 
 const db = new DataSource({
   "type": "mysql",
@@ -10,9 +11,18 @@ const db = new DataSource({
   "database": config.DB_NAME,
   "logging": false,
   "synchronize": true,
-  "entities": [] as any[],
-  "subscribers": [],
-  "migrations": [],
-})
+  "entities": [entities.User],
+});
+
+// (async function() {
+//   try {
+//     await db.initialize()
+//     console.log('[App]: Connected to the database');
+//   } catch (err) {
+//     console.log(err);
+//   }
+// })()
+
+console.log('db');
 
 export default db

@@ -1,4 +1,5 @@
 import { Application } from 'express'
+import { DataSource } from 'typeorm';
 import config  from "./constants";
 
 
@@ -6,9 +7,11 @@ class Server {
   app: Application
   constructor(app: Application) {
     this.app = app;
+    console.log('server');
+    
   }
 
-  async connecte(db: any) {
+  async connecte(db: DataSource) {
     try {
       await db.initialize()
       console.log('[App]: Connected to the database');
