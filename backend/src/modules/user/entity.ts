@@ -1,4 +1,3 @@
-import "reflect-metadata"
 import { Entity, Column, PrimaryGeneratedColumn } from "typeorm";
 
 @Entity("user")
@@ -14,5 +13,4 @@ export default class User {
 
   @Column()
   type: string;
-
 }

@@ -1,6 +1,6 @@
-import config from "./constants";
 import { DataSource } from "typeorm";
 import { entities } from "../modules";
+import config from "./constants";
 
 const db = new DataSource({
   "type": "mysql",
@@ -13,16 +13,5 @@ const db = new DataSource({
   "synchronize": true,
   "entities": [entities.User],
 });
-
-// (async function() {
-//   try {
-//     await db.initialize()
-//     console.log('[App]: Connected to the database');
-//   } catch (err) {
-//     console.log(err);
-//   }
-// })()
-
-console.log('db');
 
 export default db

@@ -1,4 +1,3 @@
-// import the winston library
 import winston from 'winston';
 
 // filter function,
