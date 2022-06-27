@@ -12,5 +12,5 @@ export default class User {
   password: string;
 
   @Column()
-  type: string;
+  role: string;
 }

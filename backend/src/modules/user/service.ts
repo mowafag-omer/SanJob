@@ -1,7 +1,7 @@
 import bcrypt from "bcrypt";
+import jwt from "jsonwebtoken";
 import { IuserRepo } from "./repository";
-import { userProps } from "./userTypes";
-import jwt from 'jsonwebtoken';
+import { userProps } from "./types";
 import config from "../../config/constants";
 
 export interface IuserService {
@@ -17,59 +17,47 @@ export default class UserService implements IuserService {
     this.userRepo = userRepo;
   }
 
-  async registerUser (props: userProps): Promise<any> {
-    const { email, password, type } = props;
+  async registerUser(props: userProps): Promise<any> {
+    const { email, password, role } = props;
     try {
-      const userExists = await this.userRepo.exists(email, type);
-      if (userExists) return { success: false };
+      const userExists = await this.userRepo.exists(email, role);
+      if (userExists)
+        return { success: false, message: "User already exist !" };
 
       const hashedPass = await bcrypt.hash(password, 10);
       props.password = hashedPass;
+      props.email = email.toLowerCase()
 
       await this.userRepo.create(props);
-      return { success: true };
+      return { success: true, message: "User registered successfully !" };
     } catch (error) {
       throw error;
     }
-  };
+  }
 
-  async login(props: userProps) : Promise<any> {
+  async login(props: userProps): Promise<any> {
     try {
-      const user = await this.userRepo.getUserByEmail(props.email)
-      if (!user){
-        return {
-          success: false, 
-          message: 'Incorrect email or password'
-        }
-      }
-  
-      const checkPass = await bcrypt.compareSync(props.password, user.password);
-      if(!checkPass){
-        return {
-          success: false, 
-          message: 'incorrect email or password'
-        }
-      }
-  
+      const user = await this.userRepo.getUserByEmail(props.email);
+      if (!user)
+        return { success: false, message: "Incorrect email or password" };
+
+      const checkPass = bcrypt.compareSync(props.password, user.password);
+      if (!checkPass)
+        return { success: false, message: "incorrect email or password" };
+
       const access_token = jwt.sign(
-        { id: user.id, email: user.email, type: user.type },
+        { id: user.id, email: user.email, type: user.role },
         config.JWT_SECRET,
-        { expiresIn: "30m" }
+        { expiresIn: "2h" }
       );
-  
+
       const refresh_token = jwt.sign(
         { id: user.id }, 
         config.JWT_SECRET, 
         { expiresIn: "24h" }
       );
-  
-      return {
-        success: true,
-        payload: {
-          access_token,
-          refresh_token
-        }
-      }  
+
+      return { success: true, payload: { access_token, refresh_token } };
     } catch (error) {
       throw error;
     }

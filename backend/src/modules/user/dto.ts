@@ -4,7 +4,7 @@ import { AbstractDto } from '../../helpers/abstractDto'
 interface IRequestCreateUserDto {
   email: string;
   password: string;
-  type: string
+  role: string
 }
 
 export class RequestCreateUserDto extends AbstractDto implements IRequestCreateUserDto {
@@ -18,14 +18,14 @@ export class RequestCreateUserDto extends AbstractDto implements IRequestCreateU
   @MaxLength(30, { message: 'password is too long' })
   public password: string
 
-  @IsDefined({ message: 'Account Type is required !'})
+  @IsDefined({ message: 'Role is required !'})
   @IsIn(['company', 'applicant'])
-  public type: string
+  public role: string
 
   constructor(props: IRequestCreateUserDto) {
     super()
     this.email = props.email
     this.password = props.password
-    this.type = props.type
+    this.role = props.role
   }
 }

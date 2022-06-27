@@ -1,16 +1,17 @@
 import { EntityTarget, Repository } from "typeorm";
 import { getEntityRepository } from "../../helpers/getentityRepository";
 import User from "./entity";
-import { userProps } from "./userTypes";
+import { userProps } from "./types";
 
 export interface IuserRepo {
   userEntity: EntityTarget<User>;
+  userRepo: (entity: EntityTarget<User>) => Repository<User>;
   exists(email: string, type: string): Promise<boolean>;
   create(user: userProps): Promise<userProps | false>;
   getUserByEmail(email: string): Promise<User | null>;
 }
 
-export default class UserRepository {
+export default class UserRepository implements IuserRepo{
   userEntity: EntityTarget<User>;
   userRepo: (entity: EntityTarget<User>) => Repository<User>;
 
@@ -19,15 +20,15 @@ export default class UserRepository {
     this.userRepo = getEntityRepository;
   }
 
-  async exists(email: string, type: string): Promise<boolean> {
+  async exists(email: string, role: string): Promise<boolean> {
     const userRepo = this.userRepo(this.userEntity);
-    const result = await userRepo.findOneBy({ email: email, type: type });
+    const result = await userRepo.findOneBy({ email: email, role: role });
     return !!result;
   }
 
   async create(user: userProps): Promise<userProps | false> {
     const userRepo = this.userRepo(this.userEntity);
-    const userExists = await this.exists(user.email, user.type);
+    const userExists = await this.exists(user.email, user.role);
     return !userExists ? await userRepo.save(user) : false;
   }
 

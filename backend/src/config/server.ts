@@ -7,8 +7,6 @@ class Server {
   app: Application
   constructor(app: Application) {
     this.app = app;
-    console.log('server');
-    
   }
 
   async connecte(db: DataSource) {
@@ -29,7 +27,7 @@ class Server {
   routes(routes: any) {
     for (const path in routes) {
       this.app.use(`${config.API_VERSION}${path}`, routes[path]);
-      }
+    }
   }
 
   errorHandler(errorHandler: any) {
