@@ -1,17 +1,17 @@
 import { Request, Response, NextFunction } from "express";
 import ApiError from "../../helpers/ApiError";
-import { IuserService } from "./service";
+import { IUserService } from "./service";
 import { RequestCreateUserDto } from "./dto";
 
 export interface IuserController {
-  userService: IuserService;
+  userService: IUserService;
   register(req: Request, res: Response, next: NextFunction): any;
 }
 
 export default class UserController implements IuserController {
-  userService: IuserService;
+  userService: IUserService;
 
-  constructor(userService: IuserService) {
+  constructor(userService: IUserService) {
     this.userService = userService;
   }
 
@@ -35,13 +35,13 @@ export default class UserController implements IuserController {
     try {
       const result = await this.userService.login(req.body);
 
-      if (!result.success) throw new ApiError(400, result.message);
+      if (!result.success) throw new ApiError(400, result?.message);
 
       if (result.success) {
         const { access_token, refresh_token } = result.payload;
         const expireAt = new Date(Date.now() + 30 * 86400 * 1000);
 
-        res.header("Authorization", `Bearer ${access_token}`);
+        res.header("authorization", `Bearer ${access_token}`);
         res.cookie("refresh_token", refresh_token, {
           httpOnly: true,
           expires: expireAt,

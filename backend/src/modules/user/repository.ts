@@ -3,7 +3,7 @@ import { getEntityRepository } from "../../helpers/getentityRepository";
 import User from "./entity";
 import { userProps } from "./types";
 
-export interface IuserRepo {
+export interface IUserRepo {
   userEntity: EntityTarget<User>;
   userRepo: (entity: EntityTarget<User>) => Repository<User>;
   exists(email: string, type: string): Promise<boolean>;
@@ -11,7 +11,7 @@ export interface IuserRepo {
   getUserByEmail(email: string): Promise<User | null>;
 }
 
-export default class UserRepository implements IuserRepo{
+export default class UserRepository implements IUserRepo {
   userEntity: EntityTarget<User>;
   userRepo: (entity: EntityTarget<User>) => Repository<User>;
 
