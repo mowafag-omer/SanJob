@@ -1,8 +1,12 @@
-import db from "../config/database";
-import { User } from "./user"
-import userRouter from "./user/router";
+import { User, userRouter } from "./user"
+import { JobSeeker, jobSeekerRouter } from "./jobSeeker";
+import { Company, companyRouter } from "./company";
 
-const entities = { User }
-const router = { '/user': userRouter }
+const entities = { User, JobSeeker, Company }
+const routers = { 
+  '/user': userRouter, 
+  '/jobSeeker': jobSeekerRouter,
+  '/conmpany': companyRouter
+}
 
-export { db, entities, router }
+export { entities, routers }

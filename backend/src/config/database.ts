@@ -11,7 +11,8 @@ const db = new DataSource({
   "database": config.DB_NAME,
   "logging": false,
   "synchronize": false,
-  "entities": [entities.User],
+  // "dropSchema": true,
+  "entities": [...Object.values(entities)],
 });
 
 export default db

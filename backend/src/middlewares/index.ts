@@ -11,7 +11,7 @@ const morganMiddleware = morgan("combined", {
   skip: (_req, res) => res.statusCode < 400,
   // specify a stream for requests logging
   stream: {
-    write: (msg) => logger.http(msg),
+    write: (msg) => logger.error(msg),
   },
 });
 

@@ -1,4 +1,4 @@
-import { MinLength, MaxLength, IsString, IsDefined, IsEmail, IsIn, IsPhoneNumber } from 'class-validator'
+import { MinLength, MaxLength, IsString, IsDefined, IsEmail, IsIn, IsPhoneNumber, IsDate, IsDateString } from 'class-validator'
 import { AbstractDto } from '../../helpers/abstractDto'
 
 interface IRequestCreateProfileDto {
@@ -9,8 +9,11 @@ interface IRequestCreateProfileDto {
   phone: string | null;
   birthdate: Date | null;
   location: string | null;
-  profile_headline: string | null;
+  profile_title: string | null;
   sector: number | null;
+  linkedin: string | null
+  website: string | null
+  github: string | null
 }
 
 export class RequestCreateProfileDto extends AbstractDto implements IRequestCreateProfileDto {
@@ -27,10 +30,17 @@ export class RequestCreateProfileDto extends AbstractDto implements IRequestCrea
   public email: string
 
   public phone: string | null
+
+  @IsDateString()
   public birthdate: Date | null
+
   public location: string | null;
-  public profile_headline: string | null;
+  public profile_title: string | null;
   public sector: number | null;
+  public linkedin: string | null
+  public website: string | null
+  public github: string | null
+
   
   constructor(props: IRequestCreateProfileDto) {
     super()
@@ -41,7 +51,10 @@ export class RequestCreateProfileDto extends AbstractDto implements IRequestCrea
     this.phone = props.phone || null
     this.birthdate = props.birthdate || null
     this.location = props.location || null
-    this.profile_headline = props.profile_headline || null
+    this.profile_title = props.profile_title || null
     this.sector = props.sector || null
+    this.linkedin = props.linkedin || null
+    this.website = props.website || null
+    this.github = props.github || null
   }
 }

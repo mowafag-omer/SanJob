@@ -1,4 +1,4 @@
-export type applicantProps = {
+export type jobSeekerProps = {
   id?: number
   gender: string;
   first_name: string;
@@ -7,8 +7,11 @@ export type applicantProps = {
   phone: string;
   birthdate: string;
   location: string;
-  profile_headline: string;
+  profile_title: string;
   sector: number;
+  linkedin: string
+  website: string
+  github: string
 }
 
 export type ServicReturnType = {
