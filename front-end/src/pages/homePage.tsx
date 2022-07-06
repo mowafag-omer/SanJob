@@ -1,8 +1,12 @@
-import React from 'react'
+import Banner from '../components/homePage/banner'
+import Sectors from '../components/homePage/sectors'
 
 const HomePage = () => {
   return (
-    <div>HomePage</div>
+    <div>
+      <Banner />
+      <Sectors />
+    </div>
   )
 }
 

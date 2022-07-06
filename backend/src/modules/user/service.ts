@@ -27,8 +27,8 @@ export default class UserService implements IUserService {
     props.password = hashedPass;
     props.email = email.toLowerCase()
 
-    await this.userRepo.create(props);
-    return { success: true, message: "User registered successfully !" };
+    const result = await this.userRepo.create(props);
+    return { success: true, message: "User registered successfully !", payload: result };
   }
 
   async login(props: userProps): Promise<any> {

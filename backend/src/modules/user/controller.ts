@@ -23,7 +23,7 @@ export default class UserController implements IuserController {
 
       const result = await this.userService.registerUser(req.body);
 
-      if (result.success) res.status(201).json({ message: result.message });
+      if (result.success) res.status(201).json({ message: result.message, payload: result.payload.id });
 
       if (!result.success) throw new ApiError(409, result.message);
     } catch (error) {
