@@ -1,7 +1,9 @@
 export type userProps = {
+  id?: any
   email: string
   password: string
   role: string
+  hasProfile?: boolean 
 }
 
 export type ServicReturnType = {

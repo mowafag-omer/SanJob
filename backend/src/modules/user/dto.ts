@@ -5,6 +5,7 @@ interface IRequestCreateUserDto {
   email: string;
   password: string;
   role: string
+  hasProfile: boolean | null
 }
 
 export class RequestCreateUserDto extends AbstractDto implements IRequestCreateUserDto {
@@ -19,8 +20,10 @@ export class RequestCreateUserDto extends AbstractDto implements IRequestCreateU
   public password: string
 
   @IsDefined({ message: 'Role is required !'})
-  @IsIn(['company', 'applicant'])
+  @IsIn(['company', 'jobseeker'])
   public role: string
+
+  public hasProfile: boolean | null;
 
   constructor(props: IRequestCreateUserDto) {
     super()

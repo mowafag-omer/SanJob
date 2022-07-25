@@ -7,7 +7,7 @@ export interface IUserRepo {
   userEntity: EntityTarget<User>;
   userRepo: (entity: EntityTarget<User>) => Repository<User>;
   exists(email: string, type: string): Promise<boolean>;
-  create(user: userProps): Promise<userProps | false>;
+  create(user: userProps): Promise<userProps>;
   getUserByEmail(email: string): Promise<User | null>;
 }
 
@@ -26,10 +26,9 @@ export default class UserRepository implements IUserRepo {
     return !!result;
   }
 
-  async create(user: userProps): Promise<userProps | false> {
+  async create(props: userProps): Promise<userProps> {
     const userRepo = this.userRepo(this.userEntity);
-    const userExists = await this.exists(user.email, user.role);
-    return !userExists ? await userRepo.save(user) : false;
+    return await userRepo.save(props) 
   }
 
   async getUserByEmail(email: string): Promise<User | null> {

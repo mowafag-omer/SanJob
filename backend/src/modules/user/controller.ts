@@ -21,11 +21,22 @@ export default class UserController implements IuserController {
       const dtoErrors = await requestUserDto.isValid(requestUserDto);
       if (!!dtoErrors) throw new ApiError(400, dtoErrors);
 
+      req.body.hasProfile = false
+
       const result = await this.userService.registerUser(req.body);
-
-      if (result.success) res.status(201).json({ message: result.message, payload: result.payload.id });
-
+      
       if (!result.success) throw new ApiError(409, result.message);
+
+      const { access_token, refresh_token } = result.payload;
+      const expireAt = new Date(Date.now() + 30 * 86400 * 1000);
+
+      res.cookie("refresh_token", refresh_token, {
+        httpOnly: true,
+        expires: expireAt,
+      });
+
+      if (result.success) res.status(201).json({ message: result.message, token: access_token });
+
     } catch (error) {
       next(error);
     }

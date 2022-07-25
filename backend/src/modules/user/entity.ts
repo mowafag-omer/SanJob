@@ -13,4 +13,7 @@ export default class User {
 
   @Column()
   role: string;
+
+  @Column()
+  hasProfile: boolean = false
 }

@@ -2,6 +2,7 @@ import React from "react";
 import {
   Grid,
   Box,
+  Stack,
   FormControl,
   TextField,
   InputLabel,
@@ -13,12 +14,26 @@ import {
 } from "@mui/material";
 import Visibility from "@mui/icons-material/Visibility";
 import VisibilityOff from "@mui/icons-material/VisibilityOff";
-import { isDisabled } from "@testing-library/user-event/dist/utils";
+import { Link } from 'react-router-dom'
 
 interface State {
   email: string;
   password: string;
   showPassword: boolean;
+}
+
+const styles = {
+  container: {
+    display: 'flex',
+    flexDirection: 'column',
+    alignItems: 'center',
+  },
+  signUp: { 
+    width: "15ch", 
+    marginTop: '8px',
+    background: '#ffc107', 
+    color: 'black' 
+  }
 }
 
 const Login = () => {
@@ -59,10 +74,10 @@ const Login = () => {
           sx={{
             display: "flex",
             flexDirection: "column",
-            justifyContent: "space-around",
+            justifyContent: "space-between",
             alignItems: "center",
-            padding: 3,
-            minHeight: 250,
+            padding: 2,
+            minHeight: 400,
             marginTop: 8,
             boxShadow: 2,
             borderRadius: '5px'
@@ -109,6 +124,14 @@ const Login = () => {
           >
             Login
           </Button>
+          <Stack sx={styles.container}>
+            <Typography>
+              Don't have an account yet ?
+            </Typography>
+            <Button component={Link} to='/register' variant="outlined" sx={styles.signUp}>
+              Sign up
+            </Button>
+          </Stack>    
         </Box>
       </form>
     </Grid>
