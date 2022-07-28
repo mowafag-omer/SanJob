@@ -1,6 +1,6 @@
 import {
   Grid,
-  Container,
+  Box,
   Stack,
   Typography,
   Paper,
@@ -9,21 +9,12 @@ import {
 } from "@mui/material"
 import SearchIcon from "@mui/icons-material/Search"
 
-const styles = {
-  container: {
-    justifyContent: 'center',
-    height: "450px",
-    padding: "8%",
-    background: "#2b3247",
-    // background: "#42a5f5",
-  },
-}
 
 const Banner = () => {
   return (
-    <Grid color="primary" sx={styles.container}>
-      <Container sx={{maxWidth: '1024px'}}> 
-        <Stack style={{color: '#ffffff'}}>
+    <Grid color="primary" sx={style.container}>
+      <Box sx={style.box}>
+        <Stack sx={{color: '#ffffff'}}>
           <Typography variant="h3">Find your fit.</Typography>
           <Typography variant="h6">
             We are here to help you find your dream job and start building your
@@ -32,17 +23,9 @@ const Banner = () => {
         </Stack>
         <Paper
           component="form"
-          sx={{
-            p: "2px 4px",
-            display: "flex",
-            alignItems: "center",
-            width: 700,
-            height: 55,
-            marginTop: "20px",
-          }}
+          sx={style.paper}
         >
           <InputBase
-            fullWidth
             sx={{ ml: 1, flex: 1 }}
             placeholder="Search"
             inputProps={{ "aria-label": "search" }}
@@ -51,9 +34,33 @@ const Banner = () => {
             <SearchIcon />
           </IconButton>
         </Paper>
-      </Container>
+      </Box>
     </Grid>
   )
 }
 
 export default Banner
+
+const style = {
+  container: {
+    display: 'flex',
+    flexDirection: "column",
+    alignItems: {lg: 'center'} ,
+    bgcolor: "#2b3247",
+    // background: "#42a5f5",
+    height: {lg: '50vh', xs: '70vh'},
+    px: 3,
+    pt: {xs: 14, lg: 9}
+  },
+  box: {
+    width: {'md': '80%', lg: '1024px'} 
+  },
+  paper: {
+    p: "2px 4px",
+    display: "flex",
+    alignItems: "center",
+    width: {md: '80%', lg: '100%'},
+    height: 55,
+    marginTop: "20px",
+  }
+}

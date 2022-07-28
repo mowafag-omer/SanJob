@@ -2,7 +2,7 @@ import { createSlice, createAsyncThunk } from '@reduxjs/toolkit'
 import type { PayloadAction } from '@reduxjs/toolkit'
 import api from '../utils/api'
 
-export interface UserState {
+export type UserState = {
   token: string | null,
   id: number | null,
   email: string | null,
@@ -10,6 +10,12 @@ export interface UserState {
   isLogged: boolean,
   loading: boolean,
   error: string
+}
+
+export type registerProps = {
+  email: string
+  password: string,
+  role: 'jobseeker' | 'company'
 }
 
 const initialState: UserState = {
@@ -22,10 +28,10 @@ const initialState: UserState = {
   error: ''
 }
 
-export const register = createAsyncThunk('user/register', (userProps) => {
-  return api
-    .post('/user/register', {userProps} )
-    .then(response => response.data)
+export const register = createAsyncThunk('user/register', async (props: registerProps) => {
+  return await api
+    .post('/user/register', props )
+    .then((response: { data: any }) => response.data)
 })
 
 export const userSlice = createSlice({
@@ -36,15 +42,18 @@ export const userSlice = createSlice({
     builder.addCase(register.pending, state => {
       state.loading = true
     })
-    builder.addCase(register.fulfilled, (state, action) => {
-      state.loading = false
-      state.users = action.payload
-      state.error = ''
+    builder.addCase(register.fulfilled, (state, action: PayloadAction<any>) => {
+      console.log(action);
+      
+      // state.loading = false
+      // state.users = action.payload
+      // state.error = ''
     })
-    builder.addCase(register.rejected, (state, action) => {
-      state.loading = false
-      state.users = []
-      state.error = action.error.message
+    builder.addCase(register.rejected, (state, action: PayloadAction<any>) => {
+      console.log(action);
+      // state.loading = false
+      // state.users = []
+      // state.error = action.error.message
     })
   },
 })

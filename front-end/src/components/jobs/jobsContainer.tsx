@@ -1,7 +1,6 @@
 import {
   Grid,
   Container,
-  Box,
   Typography,
   TextField,
   CardActionArea,
@@ -13,6 +12,7 @@ import {
 import HandshakeIcon from '@mui/icons-material/Handshake';
 import LocationOnIcon from '@mui/icons-material/LocationOn';
 import TodayIcon from '@mui/icons-material/Today';
+import { Link } from "react-router-dom";
 
 const data = [
   {
@@ -51,10 +51,10 @@ const data = [
 
 const JobsContainer = () => {
   return (
-    <Grid container direction="column" alignItems="center" sx={styles.container}>
-      <Box sx={styles.box}>
+    <Grid container direction="column" alignItems="center" sx={styles.gird}>
+      <Container sx={styles.container}>
         {data.map((job: any) => (
-          <Card sx={styles.card}>
+          <Card component={Link} to='/job' sx={styles.card}>
             <CardMedia
               component="img"
               image={job.img}
@@ -85,7 +85,7 @@ const JobsContainer = () => {
             </CardContent>
           </Card>
         ))}
-      </Box>
+      </Container>
     </Grid>
   )
 }
@@ -93,12 +93,12 @@ const JobsContainer = () => {
 export default JobsContainer
 
 const styles = {
-  container : {
+  gird : {
     height: "100%",
     width: '100%',
     p: '3ch'
   },
-  box: {
+  container: {
     width: '1200px',
     display: 'flex',
     flexDirection: 'column',
@@ -110,7 +110,8 @@ const styles = {
     flexDirection: 'row',
     width: '70%',
     bgcolor: '#f7f7f7',
-    boxShadow: 1
+    boxShadow: 1,
+    textDecoration: 'none'
   },
   center: {
     display: 'flex',

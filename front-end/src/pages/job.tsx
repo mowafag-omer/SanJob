@@ -128,7 +128,7 @@ const style = {
     gap: '4px'
   },
   main: {
-    maxWidth: '700px',
+    width: {md: '900px'},
     display: 'flex',
     flexDirection: 'column',
     alignItems: 'center',

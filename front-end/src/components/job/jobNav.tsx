@@ -1,9 +1,11 @@
 import { useEffect, useState } from "react";
 import { AppBar, IconButton, Toolbar, Typography } from "@mui/material";
 import ArrowBackIcon from '@mui/icons-material/ArrowBack';
+import { useNavigate } from 'react-router-dom';
 
 const JobNav = () => {
   const [showNav, setShowNav] = useState(false)
+  const navigate = useNavigate();
 
   useEffect(() => {
     const handleScroll = () => {
@@ -18,7 +20,6 @@ const JobNav = () => {
   
   return (
     <AppBar 
-      // position='static'
       sx={[
         () => showNav 
           ? {position: 'fixed'} 
@@ -26,8 +27,8 @@ const JobNav = () => {
         style.appBar
       ]}
     >
-      <Toolbar variant="dense" sx={{maxWidth: '1024px'}}>
-        <IconButton>
+      <Toolbar variant="dense" sx={{width: {lg: '1200px'} }}>
+        <IconButton onClick={() => navigate(-1)}>
           <ArrowBackIcon />
         </IconButton>
       </Toolbar>
@@ -40,7 +41,8 @@ export default JobNav
 const style = {
   appBar: {
     justifyContent: 'center',
-    alignContent: 'stretch',
+    // alignContent: 'stretch',
+    alignItems: {lg: 'center'},
     height: 45,
     bgcolor: '#f7f7f7',
     boxShadow: 0,

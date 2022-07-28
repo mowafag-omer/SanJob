@@ -5,8 +5,9 @@ import {
   CardActionArea,
   CardMedia,
   CardContent,
-  // IconButton,
+  IconButton,
   Typography,
+  Box,
 } from "@mui/material";
 import MemoryIcon from '@mui/icons-material/Memory';
 import LocalDiningIcon from '@mui/icons-material/LocalDining';
@@ -17,55 +18,31 @@ import FactCheckIcon from '@mui/icons-material/FactCheck';
 
 const Sectors = () => {
   return (
-    <div
-      style={{
-        width: "100%",
-        display: "flex",
-        flexDirection: "column",
-        alignItems: 'center',
-        background: "#f7f7f7",
-      }}
-    >
-      <Typography variant="h4" align="center" sx={{ paddingTop: "18px" }}>
+    <Grid
+      container
+      direction="column"
+      alignItems="center" 
+      sx={{ bgcolor: '#f7f7f7'}}
+      >
+      <Typography variant="h5" align="center" sx={{ padding: "18px" }}>
         Job sectors
       </Typography>
 
-      <Grid
-        container
-        direction="row"
-        justifyContent="space-between"
-        alignItems="center"
-        maxWidth="1024px"
+      <Box
+        sx={style.box}
       >
         {[
-          { name: "Tech", icon: <MemoryIcon fontSize="large" /> },
-          { name: "Consulting", icon: <FactCheckIcon fontSize="large" /> },
-          { name: "Food", icon: <LocalDiningIcon fontSize="large" /> },
-          { name: "Distribution", icon: <LocalShippingIcon fontSize="large" /> },
-          { name: "Banking / Finance", icon: <AccountBalanceIcon fontSize="large" /> },
-          { name: "Industry", icon: <FactoryIcon fontSize="large" /> },
+          { name: "Tech", icon: <MemoryIcon fontSize="large"/> },
+          { name: "Consulting", icon: <FactCheckIcon fontSize="large"/> },
+          { name: "Food", icon: <LocalDiningIcon fontSize="large"/> },
+          { name: "Distribution", icon: <LocalShippingIcon fontSize="large"/> },
+          { name: "Banking / Finance", icon: <AccountBalanceIcon fontSize="large"/> },
+          { name: "Industry", icon: <FactoryIcon fontSize="large"/> },
         ].map((sector: { name: string; icon: React.ReactNode }) => (
-          <Card sx={{ width: 300, margin: 2, border: 1 }} style={{ background: '#ffffff'}}>
+          <Card sx={style.card}>
             <CardActionArea>
-            <CardMedia
-                component="div"
-                sx={{
-                  height: 80,
-                  margin: 2,
-                  display: "flex",
-                  justifyContent: "center",
-                  alignItems: 'center',
-                  color: '#2b3247'
-                }}
-              >
-                {/* <IconButton
-                  // color="primary"
-                  size="large"
-                  sx={{ color: '#2b3247' }}
-                  aria-label="login"
-                > */}
-                  {sector.icon}
-                {/* </IconButton> */}
+              <CardMedia component="div" sx={style.cardMedia}>
+                {sector.icon}
               </CardMedia>
               <CardContent>
                 <Typography
@@ -80,9 +57,31 @@ const Sectors = () => {
             </CardActionArea>
           </Card>
         ))}
-      </Grid>
-    </div>
+      </Box>
+    </Grid>
   );
 };
 
 export default Sectors;
+
+const style = {
+  box: {
+    display: 'flex',
+    flexWrap: 'wrap',
+    justifyContent: 'center',
+    maxWidth: '1024px'
+  },
+  card: { 
+    width: 300, 
+    m: 2, 
+    border: 1,
+    bgcolor: "#fff" 
+  },
+  cardMedia: { 
+    display: 'flex',
+    justifyContent: 'center',
+    alignItems: 'center',
+    height: 80, 
+    margin: 2 
+  }
+} 
