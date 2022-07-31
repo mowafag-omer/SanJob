@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect, useState } from "react"
 import {
   Grid,
   Box,
@@ -12,13 +12,16 @@ import {
   Typography,
   Button,
   FormHelperText,
-} from "@mui/material";
-import Visibility from "@mui/icons-material/Visibility";
-import VisibilityOff from "@mui/icons-material/VisibilityOff";
+  Alert
+} from "@mui/material"
+import Visibility from "@mui/icons-material/Visibility"
+import VisibilityOff from "@mui/icons-material/VisibilityOff"
 import { Link } from 'react-router-dom'
-import { useDispatch } from "react-redux";
-import { register } from "../store/userSlice";
-import { AppDispatch } from "../store";
+import { useSelector, useDispatch } from "react-redux"
+import { register, cleanErrors } from "../store/userSlice"
+import { RootState, AppDispatch } from "../store"
+import FeedBack from "../components/feedBack"
+import { useNavigate } from "react-router-dom"
 
 const styles = {
   container: {
@@ -34,30 +37,47 @@ const styles = {
   }
 }
 
-interface State {
-  email: string;
-  password: string;
+type State = {
+  email: string
+  password: string
   confirmPassword: string
-  showPassword: boolean;
-  showConfirmPassword: boolean;
-  passwordMatch: boolean;
+  showPassword: boolean
+  showConfirmPassword: boolean
+  passwordMatch: boolean
 }
 
 const Register = () => {
-  const [values, setValues] = React.useState<State>({
+  const [values, setValues] = useState<State>({
     email: "",
     password: "",
     confirmPassword: "",
     showPassword: false,
     showConfirmPassword: false,
     passwordMatch: true
-  });
+  })
 
   const dispatch: AppDispatch = useDispatch()
+  const { isLogged, error, validationError } = useSelector((state: RootState) => state.user)
+  const navigate = useNavigate()
 
+  useEffect(() => {
+    dispatch(cleanErrors())
+    isLogged && navigate('/jobseekerInfo')
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [])
+
+  useEffect(() => {
+    if (isLogged) {
+      dispatch(cleanErrors())
+      setValues({...values, email: "", password: "", confirmPassword: ""})
+      setTimeout(() => { return navigate('/jobseekerInfo') }, 2000)
+    } 
+
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [dispatch, isLogged, navigate])
+  
   const handleSubmit = (event: React.ChangeEvent<HTMLFormElement>) => {
-    event.preventDefault();
-    console.log('submit');
+    event.preventDefault()
     if (values.password !== values.confirmPassword)
       setValues({ ...values, passwordMatch: false })
 
@@ -66,37 +86,34 @@ const Register = () => {
       password: values.password, 
       role: 'jobseeker'
     }))
-    
   }
 
   const handleChange = (prop: keyof State) => (event: React.ChangeEvent<HTMLInputElement>) => {
-    setValues({ ...values, [prop]: event.target.value });
+    setValues({ ...values, [prop]: event.target.value })
 
     if (prop === "confirmPassword") {
       if (values.password === event.target.value) 
         setValues({ ...values, [prop]: event.target.value, passwordMatch: true })
     }
-  };
+  }
     
   const handleClickShowPassword = () => {
     setValues({
       ...values,
       showPassword: !values.showPassword,
-    });
-  };
+    })
+  }
 
-  const handleMouseDownPassword = (
-    event: React.MouseEvent<HTMLButtonElement>
-  ) => {
-    event.preventDefault();
-  };
+  const handleMouseDownPassword = (event: React.MouseEvent<HTMLButtonElement>) => {
+    event.preventDefault()
+  }
 
   const handleClickShowConfirmPassword = () => {
     setValues({
       ...values,
       showConfirmPassword: !values.showConfirmPassword,
-    });
-  };
+    })
+  }
 
   return (
     <Grid
@@ -105,24 +122,15 @@ const Register = () => {
       justifyContent="center"
       alignItems="center"
     >
-      {/* <form onSubmit={handleSubmit}> */}
-
+      {isLogged && <FeedBack children='done !' />}
       <Box
         component="form"
         onSubmit={handleSubmit}
-        sx={{
-          display: "flex",
-          flexDirection: "column",
-          justifyContent: "space-between",
-          alignItems: "center",
-          padding: 2,
-          minHeight: 460,
-          marginTop: 4,
-          boxShadow: 2,
-          borderRadius: '5px'
-        }}
-      >
+        sx={style.box}
+        >
         <Typography variant="h5">Sign up</Typography>
+        
+        {error && <Alert severity="error">{error}</Alert>}
 
         <FormControl sx={{ m: 1, width: "35ch" }} variant="outlined">
           <TextField 
@@ -130,12 +138,15 @@ const Register = () => {
             type="email"
             value={values.email}
             onChange={handleChange("email")}
-            label="Email" 
+            label="Email"
+            size="small"
+            error={validationError?.field === 'email'}
+            helperText={validationError?.message} 
             required
           />
         </FormControl>
 
-        <FormControl sx={{ m: 1, width: "35ch" }} required>
+        <FormControl sx={{ m: 1, width: "35ch" }} size="small" required>
           <InputLabel htmlFor="outlined-adornment-password"> 
             Password
           </InputLabel>
@@ -160,9 +171,9 @@ const Register = () => {
           />
         </FormControl>
 
-        <FormControl error={!values.passwordMatch} sx={{ m: 1, width: "35ch" }} required>
+        <FormControl error={!values.passwordMatch} sx={{ m: 1, width: "35ch" }} size="small" required>
           <InputLabel htmlFor="confirmPassword">
-            Confirm
+            Confirm password
           </InputLabel>
           <OutlinedInput
             id="confirmPassword"
@@ -181,7 +192,7 @@ const Register = () => {
                 </IconButton>
               </InputAdornment>
             }
-            label="Confirm"
+            label="Confirm password"
           />
           {!values.passwordMatch && (
             <FormHelperText id="confirmPassword">
@@ -208,10 +219,22 @@ const Register = () => {
         </Stack>    
 
       </Box>
-      {/* </form> */}
-
     </Grid>
   )
 }
 
 export default Register
+
+const style = {
+  box: {
+    display: "flex",
+    flexDirection: "column",
+    justifyContent: "space-between",
+    alignItems: "center",
+    padding: 2,
+    minHeight: 460,
+    marginTop: 4,
+    boxShadow: 2,
+    borderRadius: '5px'
+  }
+}

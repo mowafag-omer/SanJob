@@ -5,7 +5,6 @@ import {
   MenuItem,
   Toolbar,
   Typography,
-  Stack,
   Box,
   IconButton,
   Button,
@@ -13,10 +12,12 @@ import {
   Tooltip,
   Avatar,
 } from '@mui/material'
-import LoginIcon from '@mui/icons-material/Login'
-import { Link } from 'react-router-dom'
 import MenuIcon from '@mui/icons-material/Menu';
+import LoginIcon from '@mui/icons-material/Login'
 import AdbIcon from '@mui/icons-material/Adb';
+import { Link } from 'react-router-dom'
+import { useSelector } from "react-redux";
+import { RootState } from '../store';
 
 const pages = [
   {name: 'Home', path: '/'}, 
@@ -35,6 +36,9 @@ const Nav = () => {
   const [anchorElNav, setAnchorElNav] = React.useState<null | HTMLElement>(null);
   const [anchorElUser, setAnchorElUser] = React.useState<null | HTMLElement>(null);
 
+  const { isLogged, role } = useSelector((state: RootState) => state.user)
+
+
   const handleOpenNavMenu = (event: React.MouseEvent<HTMLElement>) => {
     setAnchorElNav(event.currentTarget);
   };
@@ -50,55 +54,7 @@ const Nav = () => {
     setAnchorElUser(null);
   };
 
-  return (
-    // <AppBar position='static' sx={{ background: '#dadada', display: 'flex', flexDirection: 'row', justifyContent: 'center' }}>
-    //   <Toolbar
-    //     sx={{
-    //       display: 'flex',
-    //       justifyContent: 'space-between',
-    //       color: '#2b3247',
-    //       width: '1200px',
-    //     }}
-    //   >
-    //     <Typography
-    //       variant='h5'
-    //       color='inherit'
-    //       component={Link}
-    //       to='/'
-    //       sx={{ textDecoration: 'none', fontWeight: 600 }}
-    //     >
-    //       SanJob
-    //     </Typography>
-    //     <Stack direction='row' spacing={2}>
-    //       <Button component={Link} to='/' color='inherit'>
-    //         Home
-    //       </Button>
-    //       <Button component={Link} to='/jobs' color='inherit'>Jobs</Button>
-    //       <Button color='inherit'>Companies</Button>
-    //     </Stack>
-    //     <Stack direction='row' spacing={2}>
-    //       <Button
-    //         variant='contained'
-    //         size='small'
-    //         color='inherit'
-    //         style={{ background: '#ffc107' }}
-    //       >
-    //         Company
-    //       </Button>
-    //       <Button
-    //         startIcon={<LoginIcon />}
-    //         component={Link}
-    //         to='/login'
-    //         variant='outlined'
-    //         size='small'
-    //         color='inherit'
-    //       >
-    //         Login
-    //       </Button>
-    //     </Stack>
-    //   </Toolbar>
-    // </AppBar>
-    
+  return (    
     <AppBar sx={{ bgcolor: '#dadada', color: '#2b3247'}} position="static">
       <Container maxWidth="xl">
         <Toolbar disableGutters>
@@ -198,57 +154,60 @@ const Nav = () => {
               </Button>
             ))}
           </Box>
-          
-          <Box sx={{ display: 'flex', gap: 2}}>
-           <Button
-             variant='contained'
-             size='small'
-             color='inherit'
-             style={{ background: '#ffc107' }}
-           >
-             Company
-           </Button>
-           <Button
-             startIcon={<LoginIcon />}
-             component={Link}
-             to='/login'
-             variant='outlined'
-             size='small'
-             color='inherit'
-           >
-             Login
-           </Button>
-         </Box>  
-
-          <Box sx={{ flexGrow: 0 }}>
-            <Tooltip title="Open settings">
-              <IconButton onClick={handleOpenUserMenu} sx={{ p: 0 }}>
-                <Avatar alt="Remy Sharp" src="/static/images/avatar/2.jpg" />
-              </IconButton>
-            </Tooltip>
-            <Menu
-              sx={{ mt: '45px' }}
-              id="menu-appbar"
-              anchorEl={anchorElUser}
-              anchorOrigin={{
-                vertical: 'top',
-                horizontal: 'right',
-              }}
-              keepMounted
-              transformOrigin={{
-                vertical: 'top',
-                horizontal: 'right',
-              }}
-              open={Boolean(anchorElUser)}
-              onClose={handleCloseUserMenu}
+          { !isLogged && 
+            <Box sx={{ display: 'flex', gap: 2}}>
+            <Button
+              variant='contained'
+              size='small'
+              color='inherit'
+              style={{ background: '#ffc107' }}
             >
-              {settings.map((setting) => (
-                <MenuItem component={Link} to={setting.path} key={setting.name} onClick={handleCloseUserMenu}>
-                  <Typography textAlign="center">{setting.name}</Typography>
-                </MenuItem>
-              ))}
-            </Menu>
-          </Box>
+              Company
+            </Button>
+            <Button
+              startIcon={<LoginIcon />}
+              component={Link}
+              to='/login'
+              variant='outlined'
+              size='small'
+              color='inherit'
+            >
+              Login
+            </Button>
+          </Box>  
+          }
+
+          { isLogged && role === 'jobseeker' &&
+            <Box sx={{ flexGrow: 0 }}>
+              <Tooltip title="Open settings">
+                <IconButton onClick={handleOpenUserMenu} sx={{ p: 0 }}>
+                  <Avatar alt="Remy Sharp" src="/static/images/avatar/2.jpg" />
+                </IconButton>
+              </Tooltip>
+              <Menu
+                sx={{ mt: '45px' }}
+                id="menu-appbar"
+                anchorEl={anchorElUser}
+                anchorOrigin={{
+                  vertical: 'top',
+                  horizontal: 'right',
+                }}
+                keepMounted
+                transformOrigin={{
+                  vertical: 'top',
+                  horizontal: 'right',
+                }}
+                open={Boolean(anchorElUser)}
+                onClose={handleCloseUserMenu}
+              >
+                {settings.map((setting) => (
+                  <MenuItem component={Link} to={setting.path} key={setting.name} onClick={handleCloseUserMenu}>
+                    <Typography textAlign="center">{setting.name}</Typography>
+                  </MenuItem>
+                ))}
+              </Menu>
+            </Box>
+          }
         </Toolbar>
       </Container>
     </AppBar>

@@ -19,8 +19,8 @@ const middlewares = {
   json: express.json(),
   urlencoded: express.urlencoded({ extended: false }),
   cookie: cookieParser(),
-  cors: cors(),
-  // cors: cors({origin:'http://localhost:3000',credentials:true,exposedHeaders: 'Authorization'}),
+  // cors: cors(),
+  cors: cors({origin:'http://localhost:3000', credentials:true, exposedHeaders: 'Authorization'}),
   apiLogger: morganMiddleware,
 };
 

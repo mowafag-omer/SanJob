@@ -1,5 +1,6 @@
 const decodeToken = (token: string) => {
-  return token
+  var encodedPayload = token.split('.')[1];
+  return JSON.parse(atob(encodedPayload));
 }
 
 export default decodeToken

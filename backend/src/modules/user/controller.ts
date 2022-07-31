@@ -52,13 +52,13 @@ export default class UserController implements IuserController {
         const { access_token, refresh_token } = result.payload;
         const expireAt = new Date(Date.now() + 30 * 86400 * 1000);
 
-        res.header("authorization", `Bearer ${access_token}`);
+        // res.header("authorization", `Bearer ${access_token}`);
         res.cookie("refresh_token", refresh_token, {
           httpOnly: true,
           expires: expireAt,
         });
 
-        res.status(200).json("u r in");
+        res.status(200).json({token: access_token});
       }
     } catch (error) {
       next(error);

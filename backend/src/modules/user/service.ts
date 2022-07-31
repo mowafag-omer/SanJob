@@ -32,7 +32,7 @@ export default class UserService implements IUserService {
     const result = {
       id: user.id, 
       email: user.email, 
-      type: user.role, 
+      role: user.role, 
       hasProfile: user.hasProfile
     }
     const access_token = jwt.sign(
@@ -64,7 +64,7 @@ export default class UserService implements IUserService {
       return { success: false, message: "incorrect email or password" };
 
     const access_token = jwt.sign(
-      { id: user.id, email: user.email, type: user.role, hasProfile: user.hasProfile },
+      { id: user.id, email: user.email, role: user.role, hasProfile: user.hasProfile },
       config.JWT_SECRET,
       { expiresIn: "2h" }
     );

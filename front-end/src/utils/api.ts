@@ -5,6 +5,7 @@ const instance = axios.create({
     baseURL: "http://localhost:4001/api/v1"
 })
 
+instance.defaults.headers.common["Access-Control-Allow-Origin"]= "*"
 // export const addAuth = token => {
 //     // instance.defaults.headers.common["Authorization"] = "Bearer " + token;
 //     instance.defaults.headers.common["Authorization"] = `Bearer ${token}`;

@@ -6,8 +6,10 @@ const errorHandler = (err: any, _req: Request, res: Response, _next: NextFunctio
   const status = err.status || 500;
   const msg =
     status == 500
-      ? { message: "Sonething went wrong !" }
-      : { message: err.message };
+      ? "Sonething went wrong !" 
+      : err.message
+      console.log(msg);
+      
   res.status(status).json(msg);
 };
 
