@@ -45,12 +45,14 @@ const style = {
   container: {
     display: 'flex',
     flexDirection: "column",
-    alignItems: {lg: 'center'} ,
+    justifyContent: 'center',
+    alignItems: {lg: 'center'},
     bgcolor: "#2b3247",
-    // background: "#42a5f5",
+    background: "linear-gradient(0deg, #dadada 0%, #2b3247 100%)",
     height: {lg: '50vh', xs: '70vh'},
     px: 3,
-    pt: {xs: 14, lg: 9}
+    // pt: {xs: 8, lg: 15},
+    clipPath: 'ellipse(90% 100% at 50% 0%)'
   },
   box: {
     width: {'md': '80%', lg: '1024px'} 

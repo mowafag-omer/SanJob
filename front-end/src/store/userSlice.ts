@@ -18,7 +18,7 @@ export type UserState = {
 export type registerProps = {
   email: string;
   password: string;
-  role: "jobseeker" | "company";
+  role: string;
 };
 
 export type loginProps = {

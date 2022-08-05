@@ -22,7 +22,7 @@ import { RootState } from '../store';
 const pages = [
   {name: 'Home', path: '/'}, 
   {name: 'Jobs', path: '/jobs'}, 
-  {name: 'Company', path: '#'}
+  {name: 'Company', path: '/companies'}
 ];
 
 const settings = [

@@ -12,6 +12,7 @@ import {
   Typography,
   Alert,
   Button,
+  Divider,
 } from "@mui/material"
 import Visibility from "@mui/icons-material/Visibility"
 import VisibilityOff from "@mui/icons-material/VisibilityOff"
@@ -91,7 +92,7 @@ const Login = () => {
         sx={style.box}
       >
         <Typography variant="h5">Login</Typography>
-       
+        <Divider sx={{width: '80%', mt: -1}} />
         {error && <Alert severity="error">{error}</Alert>}
 
         <FormControl sx={{ m: 1, width: "35ch" }} variant="outlined">
@@ -133,11 +134,13 @@ const Login = () => {
         <Button 
           type="submit"
           variant="contained" 
-          sx={{ width: "35ch" }}
+          sx={{ width: "30ch" }}
           disabled={!values.password || !values.email}    
         >
           Login
         </Button>
+
+        <Divider sx={{width: '80%', mb: -1}} />
         <Stack sx={style.container}>
           <Typography>
             Don't have an account yet ?
@@ -174,6 +177,11 @@ const style = {
     width: "15ch", 
     marginTop: '8px',
     background: '#ffc107', 
-    color: 'black' 
+    color: '#2b3247',
+    // "&:hover": {
+      //   color: '#dadada',
+      //   bgcolor: "#2b3247",
+      //   border: "1px solid #dadada",
+    // } 
   }
   }

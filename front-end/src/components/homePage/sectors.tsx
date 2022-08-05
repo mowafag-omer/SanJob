@@ -22,9 +22,9 @@ const Sectors = () => {
       container
       direction="column"
       alignItems="center" 
-      sx={{ bgcolor: '#f7f7f7'}}
+      sx={{ bgcolor: '#fff'}}
       >
-      <Typography variant="h5" align="center" sx={{ padding: "18px" }}>
+      <Typography variant="h4" align="center" sx={{ padding: "18px", color: "#2b3247" }}>
         Job sectors
       </Typography>
 
@@ -44,12 +44,13 @@ const Sectors = () => {
               <CardMedia component="div" sx={style.cardMedia}>
                 {sector.icon}
               </CardMedia>
-              <CardContent>
+              <CardContent sx={{}}>
                 <Typography
                   gutterBottom
                   variant="h5"
                   component="div"
                   align="center"
+                  sx={{ color: '#2b3247' }}
                 >
                   {sector.name}
                 </Typography>
@@ -69,19 +70,26 @@ const style = {
     display: 'flex',
     flexWrap: 'wrap',
     justifyContent: 'center',
-    maxWidth: '1024px'
+    maxWidth: '1024px',
   },
   card: { 
     width: 300, 
     m: 2, 
-    border: 1,
-    bgcolor: "#fff" 
+    border: 0,
+    borderRadius: 2,
+    // bgcolor: "#fff",
+    bgcolor: '#f7f7f7', 
+    boxShadow: 1,
+    "&:hover": {
+      boxShadow: 5
+    }
   },
   cardMedia: { 
     display: 'flex',
     justifyContent: 'center',
     alignItems: 'center',
     height: 80, 
-    margin: 2 
+    margin: 2,
+    color: '#2b3247'
   }
 } 

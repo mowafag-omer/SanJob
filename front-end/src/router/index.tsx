@@ -5,6 +5,7 @@ import Login from "../pages/login";
 import Register from "../pages/register";
 import Jobs from "../pages/jobs";
 import Job from "../pages/job";
+import Companies from "../pages/companies";
 import JobseekerInfo from "../pages/jobseekerInfo";
 
 const Router = () => {
@@ -17,6 +18,7 @@ const Router = () => {
           <Route path="/login" element={<Login />} />
           <Route path="/jobs" element={<Jobs />} />
           <Route path="/job" element={<Job />} />
+          <Route path="/companies" element={<Companies />} />
           <Route path="/jobseekerInfo" element={<JobseekerInfo />} />
         </Routes>
       </Layout>

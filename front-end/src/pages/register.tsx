@@ -4,15 +4,20 @@ import {
   Box,
   Stack,
   FormControl,
+  FormLabel,
   TextField,
   InputLabel,
   OutlinedInput,
   InputAdornment,
+  FormControlLabel,
+  RadioGroup,
+  Radio,
   IconButton,
   Typography,
   Button,
   FormHelperText,
-  Alert
+  Alert,
+  Divider
 } from "@mui/material"
 import Visibility from "@mui/icons-material/Visibility"
 import VisibilityOff from "@mui/icons-material/VisibilityOff"
@@ -22,28 +27,18 @@ import { register, cleanErrors } from "../store/userSlice"
 import { RootState, AppDispatch } from "../store"
 import FeedBack from "../components/feedBack"
 import { useNavigate } from "react-router-dom"
-
-const styles = {
-  container: {
-    display: 'flex',
-    flexDirection: 'column',
-    alignItems: 'center',
-  },
-  signUp: { 
-    width: "15ch", 
-    marginTop: '8px',
-    background: '#ffc107', 
-    color: 'black' 
-  }
-}
+import PersonIcon from '@mui/icons-material/Person';
+import BusinessIcon from '@mui/icons-material/Business';
 
 type State = {
   email: string
   password: string
   confirmPassword: string
+  role: string
   showPassword: boolean
   showConfirmPassword: boolean
   passwordMatch: boolean
+  roleError: boolean
 }
 
 const Register = () => {
@@ -51,9 +46,11 @@ const Register = () => {
     email: "",
     password: "",
     confirmPassword: "",
+    role: "",
     showPassword: false,
     showConfirmPassword: false,
-    passwordMatch: true
+    passwordMatch: true,
+    roleError: false
   })
 
   const dispatch: AppDispatch = useDispatch()
@@ -84,7 +81,7 @@ const Register = () => {
     dispatch(register({
       email: values.email, 
       password: values.password, 
-      role: 'jobseeker'
+      role: values.role
     }))
   }
 
@@ -94,6 +91,11 @@ const Register = () => {
     if (prop === "confirmPassword") {
       if (values.password === event.target.value) 
         setValues({ ...values, [prop]: event.target.value, passwordMatch: true })
+    }
+
+    if (prop === "role") {
+      if (event.target.value !== '') 
+        setValues({ ...values, [prop]: event.target.value, roleError: false })
     }
   }
     
@@ -129,8 +131,47 @@ const Register = () => {
         sx={style.box}
         >
         <Typography variant="h5">Sign up</Typography>
-        
+        <Divider sx={{width: '80%', my: 2}} />
         {error && <Alert severity="error">{error}</Alert>}
+
+        <FormControl error={values.roleError} sx={style.formControl}>
+          <FormLabel id="demo-controlled-radio-buttons-group">Account type</FormLabel>
+          <RadioGroup
+            aria-labelledby="demo-controlled-radio-buttons-group"
+            name="role"
+            value={values.role}
+            onChange={handleChange("role")}
+            sx={style.radioGroup}
+          >
+            <Box 
+              sx={[style.radioBox, () => values.roleError ? style.roleErorr : {}]}
+              onClick={() => setValues({...values, role: 'jobseeker', roleError: false})}
+            >
+              <Radio 
+                value="jobseeker" 
+                icon={<PersonIcon color={values.roleError ? 'error' : undefined} />} 
+                checkedIcon={<PersonIcon />} 
+              />
+              <Typography color={values.role === 'jobseeker' ? 'primary' : 'inherit'}>
+                Job seeker
+              </Typography>
+            </Box>
+            <Box 
+              sx={[style.radioBox, () => values.roleError ? style.roleErorr : {}]}
+              onClick={() => setValues({...values, role: 'company', roleError: false})}
+            >
+              <Radio 
+                value="company" 
+                icon={<BusinessIcon color={values.roleError ? 'error' : undefined} />} 
+                checkedIcon={<BusinessIcon />}
+              />
+              <Typography color={values.role === 'company' ? 'primary' : ''}>
+                Company
+              </Typography>
+            </Box>
+          </RadioGroup>
+          {values.roleError && <FormHelperText>Role is required</FormHelperText>}
+        </FormControl>
 
         <FormControl sx={{ m: 1, width: "35ch" }} variant="outlined">
           <TextField 
@@ -209,11 +250,14 @@ const Register = () => {
         >
           Sign up
         </Button>
-        <Stack sx={styles.container}>
+
+        <Divider sx={{width: '80%', my: 2}} />
+
+        <Stack sx={style.container}>
           <Typography>
             Do you have an account already ?
           </Typography>
-          <Button component={Link} to='/login' variant="outlined" sx={styles.signUp}>
+          <Button component={Link} to='/login' variant="outlined" sx={style.signUp}>
             Login
           </Button>
         </Stack>    
@@ -232,9 +276,52 @@ const style = {
     justifyContent: "space-between",
     alignItems: "center",
     padding: 2,
-    minHeight: 460,
+    minHeight: 600,
     marginTop: 4,
     boxShadow: 2,
-    borderRadius: '5px'
+    borderRadius: 2,
+    my: 3
+  },
+  formControl: {
+    display: "flex",
+    flexDirection: "colum",
+    alignItems: "center",
+    gap: 1,
+    width: '100%'
+  },
+  radioGroup: {
+    display: "flex",
+    flexDirection: "row",
+    justifyContent: "space-between",
+    width: '80%'
+  },
+  radioBox:{
+    display: "flex",
+    flexDirection: "column",
+    justifyContent: "space-around",
+    alignItems: "center",
+    p: 1.5,
+    borderRadius: 1,
+    boxShadow: 1,
+    cursor: 'pointer',
+    '&:hover': {
+      boxShadow: 3
+    }
+  },
+  roleErorr: {
+    color: '#d32f2f',
+    border: 1,
+    borderColor: '#d32f2f'
+  },
+  container: {
+    display: 'flex',
+    flexDirection: 'column',
+    alignItems: 'center',
+  },
+  signUp: { 
+    width: "15ch", 
+    marginTop: '8px',
+    background: '#ffc107', 
+    color: 'black' 
   }
 }
