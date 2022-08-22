@@ -21,6 +21,7 @@ import { useSelector, useDispatch } from "react-redux"
 import { login, cleanErrors } from "../store/userSlice"
 import { RootState, AppDispatch } from "../store"
 import { useNavigate } from "react-router-dom"
+import { getJobseekerProfile } from "../store/jobSeekerSlice"
 
 type State = {
   email: string
@@ -36,7 +37,7 @@ const Login = () => {
   })
   
   const dispatch: AppDispatch = useDispatch()
-  const { isLogged, error } = useSelector((state: RootState) => state.user)
+  const { id: userId, isLogged, hasProfile, error } = useSelector((state: RootState) => state.user)
   const navigate = useNavigate()
 
   useEffect(() => {
@@ -48,6 +49,7 @@ const Login = () => {
   useEffect(() => {
     if (isLogged) {
       dispatch(cleanErrors())
+      hasProfile &&  dispatch(getJobseekerProfile(userId))
       navigate('/jobseekerInfo') 
     } 
   })

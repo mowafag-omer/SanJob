@@ -2,6 +2,7 @@ import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 import type { PayloadAction } from "@reduxjs/toolkit";
 import api from "../utils/api";
 import decodeToken from "../utils/decodeToken";
+import { updateProfile } from "./jobSeekerSlice";
 
 export type UserState = {
   token: string | null;
@@ -9,7 +10,7 @@ export type UserState = {
   email: string | null;
   role: string | null;
   isLogged: boolean;
-  hasProfile: boolean | null;
+  hasProfile: boolean;
   loading: boolean;
   error: string | null;
   validationError: { field: string; message: string } | null;
@@ -31,7 +32,7 @@ const initialState: UserState = {
   id: null,
   email: null,
   role: null,
-  hasProfile: null,
+  hasProfile: false,
   isLogged: false,
   loading: false,
   error: null,
@@ -63,9 +64,10 @@ export const userSlice = createSlice({
   initialState,
   reducers: {
     cleanErrors: (state) => {
-      state.error = null
-      state.validationError = null
+      state.error = null;
+      state.validationError = null;
     },
+    logout: () => initialState,
   },
   extraReducers: (builder) => {
     builder.addCase(register.pending, (state) => {
@@ -74,13 +76,16 @@ export const userSlice = createSlice({
     builder.addCase(register.fulfilled, (state, action: PayloadAction<any>) => {
       const { email, hasProfile, id, role } = decodeToken(action.payload.token);
 
-      state.token = action.payload.token;
-      state.id = id;
-      state.email = email;
-      state.role = role;
-      state.hasProfile = hasProfile;
-      state.isLogged = true;
-      state.loading = false;
+      return {
+        ...state,
+        token: action.payload.token,
+        email,
+        hasProfile,
+        id,
+        role,
+        isLogged: true,
+        loading: false,
+      };
     });
     builder.addCase(register.rejected, (state, action: PayloadAction<any>) => {
       console.log("action", action);
@@ -97,14 +102,17 @@ export const userSlice = createSlice({
     });
     builder.addCase(login.fulfilled, (state, action: PayloadAction<any>) => {
       const { email, hasProfile, id, role } = decodeToken(action.payload.token);
-      
-      state.token = action.payload.token;
-      state.id = id;
-      state.email = email;
-      state.role = role;
-      state.hasProfile = hasProfile;
-      state.isLogged = true;
-      state.loading = false;
+
+      return {
+        ...state,
+        token: action.payload.token,
+        email,
+        hasProfile,
+        id,
+        role,
+        isLogged: true,
+        loading: false,
+      };
     });
     builder.addCase(login.rejected, (state, action: PayloadAction<any>) => {
       console.log("action", action);
@@ -115,8 +123,11 @@ export const userSlice = createSlice({
         state.validationError = action.payload;
       }
     });
+    builder.addCase(updateProfile.fulfilled, (state) => {
+      state.hasProfile = true;
+    });
   },
 });
 
 export default userSlice.reducer;
-export const { cleanErrors } = userSlice.actions;
+export const { cleanErrors, logout } = userSlice.actions;

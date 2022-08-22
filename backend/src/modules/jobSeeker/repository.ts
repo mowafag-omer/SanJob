@@ -1,4 +1,4 @@
-import { EntityTarget, Repository, UpdateResult } from "typeorm";
+import { EntityTarget, Repository } from "typeorm";
 import JobSeeker from "./entity";
 import { getEntityRepository } from "../../helpers/getentityRepository";
 import { jobSeekerProps } from "./types";
@@ -8,7 +8,7 @@ export interface IJobSeekerRepository {
   jobSeekerRepo: (entity: EntityTarget<JobSeeker>) => Repository<JobSeeker>
   create(jobSeeker: jobSeekerProps): Promise<jobSeekerProps>
   read(id: number): Promise<jobSeekerProps | null>
-  update(jobSeeker: jobSeekerProps): Promise<UpdateResult | false>
+  update(jobSeeker: jobSeekerProps, id: number): Promise<jobSeekerProps | false>
 }
 
 export default class JobSeekerRepository implements IJobSeekerRepository {
@@ -27,19 +27,13 @@ export default class JobSeekerRepository implements IJobSeekerRepository {
 
   async read(id: number): Promise<jobSeekerProps | null> {
     const repo = this.jobSeekerRepo(this.jobSeekerEntity);
-    return await repo.findOneBy({id: id})
+    return await repo.findOne({where: {user: {id}}, relations: ['user']})
   }
 
-  async update(jobSeekerProfile: jobSeekerProps): Promise<UpdateResult | false> {
+  async update(jobSeekerProfile: jobSeekerProps, id: number): Promise<jobSeekerProps | false> {
     const repo = this.jobSeekerRepo(this.jobSeekerEntity);
-    const jobSeekerId = jobSeekerProfile.id
-    delete jobSeekerProfile.id
-    const result = await repo.createQueryBuilder()
-      .update({ ...jobSeekerProfile })
-      .where({ id: jobSeekerId })
-      .returning('*')
-      .execute()
-
+    const result = await repo.save({id: id, ...jobSeekerProfile})
+    
     return result ? result : false
   }
 }

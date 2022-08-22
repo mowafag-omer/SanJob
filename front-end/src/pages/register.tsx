@@ -9,7 +9,6 @@ import {
   InputLabel,
   OutlinedInput,
   InputAdornment,
-  FormControlLabel,
   RadioGroup,
   Radio,
   IconButton,
@@ -19,6 +18,8 @@ import {
   Alert,
   Divider
 } from "@mui/material"
+import PersonIcon from '@mui/icons-material/Person';
+import BusinessIcon from '@mui/icons-material/Business';
 import Visibility from "@mui/icons-material/Visibility"
 import VisibilityOff from "@mui/icons-material/VisibilityOff"
 import { Link } from 'react-router-dom'
@@ -27,8 +28,6 @@ import { register, cleanErrors } from "../store/userSlice"
 import { RootState, AppDispatch } from "../store"
 import FeedBack from "../components/feedBack"
 import { useNavigate } from "react-router-dom"
-import PersonIcon from '@mui/icons-material/Person';
-import BusinessIcon from '@mui/icons-material/Business';
 
 type State = {
   email: string
@@ -129,7 +128,7 @@ const Register = () => {
         component="form"
         onSubmit={handleSubmit}
         sx={style.box}
-        >
+      >
         <Typography variant="h5">Sign up</Typography>
         <Divider sx={{width: '80%', my: 2}} />
         {error && <Alert severity="error">{error}</Alert>}

@@ -14,6 +14,7 @@ interface IRequestCreateProfileDto {
   linkedin: string | null
   website: string | null
   github: string | null
+  user: number
 }
 
 export class RequestCreateProfileDto extends AbstractDto implements IRequestCreateProfileDto {
@@ -22,7 +23,7 @@ export class RequestCreateProfileDto extends AbstractDto implements IRequestCrea
   @IsDefined({ message: 'First name is required !'})
   public first_name: string
 
-  @IsDefined({ message: 'Last name is required !'})
+  // @IsDefined({ message: 'Last name is required !'})
   public last_name: string
 
   @IsEmail()
@@ -31,7 +32,7 @@ export class RequestCreateProfileDto extends AbstractDto implements IRequestCrea
 
   public phone: string | null
 
-  @IsDateString()
+  // @IsDateString()
   public birthdate: Date | null
 
   public location: string | null;
@@ -40,6 +41,9 @@ export class RequestCreateProfileDto extends AbstractDto implements IRequestCrea
   public linkedin: string | null
   public website: string | null
   public github: string | null
+
+  @IsDefined({ message: 'User is required !'})
+  public user: number
 
   
   constructor(props: IRequestCreateProfileDto) {
@@ -56,5 +60,6 @@ export class RequestCreateProfileDto extends AbstractDto implements IRequestCrea
     this.linkedin = props.linkedin || null
     this.website = props.website || null
     this.github = props.github || null
+    this.user = props.user
   }
 }

@@ -39,7 +39,7 @@ const Sectors = () => {
           { name: "Banking / Finance", icon: <AccountBalanceIcon fontSize="large"/> },
           { name: "Industry", icon: <FactoryIcon fontSize="large"/> },
         ].map((sector: { name: string; icon: React.ReactNode }) => (
-          <Card sx={style.card}>
+          <Card key={sector.name} sx={style.card}>
             <CardActionArea>
               <CardMedia component="div" sx={style.cardMedia}>
                 {sector.icon}

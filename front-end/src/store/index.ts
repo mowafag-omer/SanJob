@@ -1,9 +1,11 @@
 import { configureStore } from '@reduxjs/toolkit'
 import userReducer from './userSlice'
+import jobseekerReducer from './jobSeekerSlice'
 
 const store = configureStore({
   reducer: {
-    user: userReducer 
+    user: userReducer,
+    jobseeker: jobseekerReducer 
   },
 })
 export type RootState = ReturnType<typeof store.getState>

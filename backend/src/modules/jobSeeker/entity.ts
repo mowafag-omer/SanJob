@@ -6,43 +6,43 @@ export default class JobSeeker {
   @PrimaryGeneratedColumn()
   id: number;
 
-  @Column()
+  @Column({ nullable: true })
   gender: string;
 
   @Column()
   first_name: string;
 
-  @Column()
+  @Column({ nullable: true })
   last_name: string;
 
-  @Column()
+  @Column({ nullable: true })
   email: string;
 
-  @Column()
+  @Column({ nullable: true })
   phone: string;
 
-  @Column()
+  @Column({ nullable: true })
   birthdate: string;
 
-  @Column()
+  @Column({ nullable: true })
   location: string;
 
-  @Column()
+  @Column({ nullable: true })
   profile_title: string;
 
-  @Column()
+  @Column({ nullable: true })
   sector: number;
 
-  @Column()
+  @Column({ nullable: true })
   linkedin: string;
 
-  @Column()
+  @Column({ nullable: true })
   website: string;
 
-  @Column()
+  @Column({ nullable: true })
   github: string;
 
-  @OneToOne(() => User)
+  @OneToOne(() => User, { nullable: false, eager: true })
   @JoinColumn()
   user: User
 }

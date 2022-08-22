@@ -11,7 +11,7 @@ const db = new DataSource({
   "database": config.DB_NAME,
   "logging": false,
   "synchronize": false,
-  // "dropSchema": false,
+  "dropSchema": false,
   "entities": [...Object.values(entities)],
 });
 

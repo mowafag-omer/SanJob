@@ -12,9 +12,11 @@ export type jobSeekerProps = {
   linkedin: string
   website: string
   github: string
+  user: { id: number }
 }
 
 export type ServicReturnType = {
   success: boolean 
+  payload?: object
   message: string
 }

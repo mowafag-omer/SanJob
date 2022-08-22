@@ -9,6 +9,7 @@ export interface IUserRepo {
   exists(email: string, type: string): Promise<boolean>;
   create(user: userProps): Promise<userProps>;
   getUserByEmail(email: string): Promise<User | null>;
+  updateUserStatus(id: number): Promise<void> 
 }
 
 export default class UserRepository implements IUserRepo {
@@ -34,5 +35,13 @@ export default class UserRepository implements IUserRepo {
   async getUserByEmail(email: string): Promise<User | null> {
     const userRepo = this.userRepo(this.userEntity);
     return await userRepo.findOneBy({ email: email });
+  }
+
+  async updateUserStatus(id: number): Promise<void> {
+    const userRepo = this.userRepo(this.userEntity);
+    const result = await userRepo.createQueryBuilder()
+    .update({ hasProfile: true })
+    .where({ id })
+    .execute()
   }
 }

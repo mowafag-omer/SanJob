@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import {
   AppBar,
   Menu,
@@ -15,9 +15,10 @@ import {
 import MenuIcon from '@mui/icons-material/Menu';
 import LoginIcon from '@mui/icons-material/Login'
 import AdbIcon from '@mui/icons-material/Adb';
-import { Link } from 'react-router-dom'
-import { useSelector } from "react-redux";
-import { RootState } from '../store';
+import { Link, useNavigate } from 'react-router-dom'
+import { useDispatch, useSelector } from "react-redux";
+import { AppDispatch, RootState } from '../store';
+import { logout } from '../store/userSlice';
 
 const pages = [
   {name: 'Home', path: '/'}, 
@@ -37,7 +38,14 @@ const Nav = () => {
   const [anchorElUser, setAnchorElUser] = React.useState<null | HTMLElement>(null);
 
   const { isLogged, role } = useSelector((state: RootState) => state.user)
+  const dispatch: AppDispatch = useDispatch();
+  const navigate = useNavigate();
 
+  useEffect(() => {
+    !isLogged && navigate('/')
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [isLogged])
+  
 
   const handleOpenNavMenu = (event: React.MouseEvent<HTMLElement>) => {
     setAnchorElNav(event.currentTarget);
@@ -50,8 +58,9 @@ const Nav = () => {
     setAnchorElNav(null);
   };
 
-  const handleCloseUserMenu = () => {
+  const handleCloseUserMenu = (name: string = '#') => {
     setAnchorElUser(null);
+    name === 'Logout' && dispatch(logout())
   };
 
   return (    
@@ -198,11 +207,16 @@ const Nav = () => {
                   horizontal: 'right',
                 }}
                 open={Boolean(anchorElUser)}
-                onClose={handleCloseUserMenu}
+                onClose={() => handleCloseUserMenu()}
               >
                 {settings.map((setting) => (
-                  <MenuItem component={Link} to={setting.path} key={setting.name} onClick={handleCloseUserMenu}>
-                    <Typography textAlign="center">{setting.name}</Typography>
+                  <MenuItem component={Link} to={setting.path} key={setting.name} onClick={() => handleCloseUserMenu(setting.name)}>
+                    <Typography 
+                      onClick={() => setting.name === 'logout' && dispatch(logout())} 
+                      textAlign="center"
+                    >
+                      {setting.name}
+                    </Typography>
                   </MenuItem>
                 ))}
               </Menu>
@@ -211,7 +225,6 @@ const Nav = () => {
         </Toolbar>
       </Container>
     </AppBar>
-    
   )
 }
 

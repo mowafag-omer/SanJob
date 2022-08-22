@@ -4,8 +4,8 @@ import UserService from "./service";
 import UserController from "./controller";
 import userRouter from "./router";
 
-const repo = new UserRepository(User)
-const service = new UserService(repo)
+const userRepo = new UserRepository(User)
+const service = new UserService(userRepo)
 const controller = new UserController(service)
 
-export { User, controller, userRouter }
+export { User, controller, userRouter, userRepo }

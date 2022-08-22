@@ -1,11 +1,12 @@
 import { IJobSeekerRepository } from "./repository";
 import { jobSeekerProps, ServicReturnType } from "./types";
+import { userRepo } from '../user'
 
 export interface IJobSeekerService {
   repo: IJobSeekerRepository
   createProfile(jobSeekerdata: jobSeekerProps): Promise<ServicReturnType>
   getProfileById(id: number): Promise<any>
-  updateProfile (jobSeekerdata: jobSeekerProps): Promise<ServicReturnType>
+  updateProfile (jobSeekerdata: jobSeekerProps, id: number): Promise<ServicReturnType>
 }
 
 export default class JobSeekerService implements IJobSeekerService{
@@ -17,20 +18,22 @@ export default class JobSeekerService implements IJobSeekerService{
 
   async createProfile(jobSeekerdata: jobSeekerProps): Promise<ServicReturnType> {
     const result = await this.repo.create(jobSeekerdata)
-    return { success: true, message: "Profile created successfully !" }
+    if (result) userRepo.updateUserStatus(+jobSeekerdata.user)
+    return { success: true, payload: result, message: "Profile created successfully !" }
   }
 
   async getProfileById(id: number): Promise<any> {
     const result = await this.repo.read(id)
+    result!.user = {id: result!.user!.id}
     return result 
       ? { success: true, payload: result }
       : { success: false, message: "Profile not found !" }
   }
 
-  async updateProfile(jobSeekerdata: jobSeekerProps): Promise<ServicReturnType> {
-    const result = await this.repo.update(jobSeekerdata)
+  async updateProfile(jobSeekerdata: jobSeekerProps, id: number): Promise<ServicReturnType> {
+    const result = await this.repo.update(jobSeekerdata, id)
     return result 
-      ? { success: true, message: "Profile updated successfully !" }
+      ? { success: true, payload: result, message: "Profile updated successfully !" }
       : { success: false, message: "Profile not found !"}
   }
 }
