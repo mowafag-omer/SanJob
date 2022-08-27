@@ -11,7 +11,7 @@ import {
 import HandshakeIcon from '@mui/icons-material/Handshake';
 import LocationOnIcon from '@mui/icons-material/LocationOn';
 import TodayIcon from '@mui/icons-material/Today';
-import JobNav from "../components/job/jobNav";
+import JobNav from "../../components/jobseeker/job/jobNav";
 
 const Job = () => {
   return (

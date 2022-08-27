@@ -13,7 +13,7 @@ export type JobseekerState = {
   birthdate: Date | null;
   location: string | null;
   profile_title: string | null;
-  sector: number | null;
+  sector: string | null;
   linkedin: string | null;
   website: string | null;
   github: string | null;
@@ -31,7 +31,7 @@ export type ProfileProps = {
   birthdate: Date | null;
   location: string | null;
   profile_title: string | null;
-  sector: number | null;
+  sector: string | null;
   linkedin: string | null;
   website: string | null;
   github: string | null;
@@ -47,7 +47,7 @@ const initialState: JobseekerState = {
   birthdate: null,
   location: null,
   profile_title: null,
-  sector: 0,
+  sector: null,
   linkedin: null,
   website: null,
   github: null,
@@ -104,20 +104,7 @@ export const jobseekerSlice = createSlice({
       (state, action: PayloadAction<any>) => {
         console.log(action.payload);
         
-        state.id = action.payload.id;
-        state.gender = action.payload.gender;
-        state.first_name = action.payload.first_name;
-        state.last_name = action.payload.last_name;
-        state.email = action.payload.email;
-        state.phone = action.payload.phone;
-        state.birthdate = action.payload.birthdate;
-        state.location = action.payload.location;
-        state.profile_title = action.payload.profile_title;
-        state.sector = action.payload.sector;
-        state.linkedin = action.payload.linkedin;
-        state.website = action.payload.website;
-        state.github = action.payload.github;
-        state.loading = false;
+        return {...state, ...action.payload, loading: false}
       }
     );
     builder.addCase(
@@ -150,7 +137,7 @@ export const jobseekerSlice = createSlice({
         state.error = action.payload;
       }
     );
-    builder.addCase( logout, () => initialState )
+    builder.addCase(logout, () => initialState)
   },
 });
 

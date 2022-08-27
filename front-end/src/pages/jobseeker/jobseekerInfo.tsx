@@ -16,9 +16,9 @@ import {
   Button,
 } from "@mui/material";
 import { useDispatch, useSelector } from "react-redux";
-import { RootState, AppDispatch } from "../store";
+import { RootState, AppDispatch } from "../../store";
 import { useNavigate } from "react-router-dom";
-import { updateProfile } from "../store/jobSeekerSlice";
+import { updateProfile } from "../../store/jobSeekerSlice";
 
 type State = {
   id: number | null
@@ -30,7 +30,7 @@ type State = {
   birthdate: Date | null;
   location: string | null;
   profile_title: string | null;
-  sector: number | null;
+  sector: string | null;
   linkedin: string | null;
   website: string | null;
   github: string | null;
@@ -38,8 +38,8 @@ type State = {
 };
 
 const JobseekerInfo = () => {
-  const { id: userId, email: userEmail, role, hasProfile } = useSelector((state: RootState) => state.user);
-  const jobseeker = useSelector((state: RootState) => state.jobseeker);
+  const { user, jobseeker, sectors } = useSelector((state: RootState) => state);
+  const { id: userId, email: userEmail, role, hasProfile } = user
 
   const [values, setValues] = useState<State>({
     id: jobseeker.id,
@@ -61,34 +61,9 @@ const JobseekerInfo = () => {
   const dispatch: AppDispatch = useDispatch();
   const navigate = useNavigate();
 
-  const updateProfileState = () => {
-    setValues({
-      id: jobseeker.id,
-      gender: jobseeker.gender,
-      first_name: jobseeker.first_name,
-      last_name: jobseeker.last_name,
-      email: hasProfile ? jobseeker.email : userEmail,
-      phone: jobseeker.phone ,
-      birthdate: jobseeker.birthdate,
-      location: jobseeker.location,
-      profile_title: jobseeker.profile_title,
-      sector: jobseeker.sector,
-      linkedin: jobseeker.linkedin,
-      website: jobseeker.website,
-      github: jobseeker.github,
-      user: userId
-    })
-  }
-
   useEffect(() => {
     if (role !== "jobseeker") navigate("/");
-    // updateProfileState()
-  }, []);
-
-  useEffect(() => {
-    updateProfileState()
-  // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [jobseeker]);
+  })
 
   const handleSubmit = (event: React.ChangeEvent<HTMLFormElement>) => {
     event.preventDefault();
@@ -187,7 +162,7 @@ const JobseekerInfo = () => {
           </FormControl>
 
           <FormControl id="phone">
-            <FormLabel>Phone </FormLabel>
+            <FormLabel>Phone</FormLabel>
             <TextField
               type="number"
               id="phone"
@@ -254,9 +229,9 @@ const JobseekerInfo = () => {
               onChange={handleChange("sector")}
             >
               <MenuItem value={0}></MenuItem>
-              <MenuItem value={1}>Tech</MenuItem>
-              <MenuItem value={2}>Business</MenuItem>
-              <MenuItem value={3}>Finance</MenuItem>
+              {sectors.sectors.map((sector) => (
+                <MenuItem key={sector} value={sector}>{sector}</MenuItem>
+              ))}
             </Select>
           </FormControl>
         </Stack>

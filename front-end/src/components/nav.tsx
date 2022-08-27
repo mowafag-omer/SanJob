@@ -167,6 +167,8 @@ const Nav = () => {
             <Box sx={{ display: 'flex', gap: 2}}>
             <Button
               variant='contained'
+              component={Link}
+              to='/login'
               size='small'
               color='inherit'
               style={{ background: '#ffc107' }}

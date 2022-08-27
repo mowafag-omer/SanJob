@@ -7,4 +7,5 @@ export type companyProps = {
   founding_year: string;
   employees: number
   website: string
+  user: { id: number }
 }

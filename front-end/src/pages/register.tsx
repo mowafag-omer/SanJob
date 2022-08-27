@@ -82,6 +82,7 @@ const Register = () => {
       password: values.password, 
       role: values.role
     }))
+    setValues({...values, password: "", confirmPassword: ""})
   }
 
   const handleChange = (prop: keyof State) => (event: React.ChangeEvent<HTMLInputElement>) => {

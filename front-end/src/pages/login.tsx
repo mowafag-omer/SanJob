@@ -21,7 +21,6 @@ import { useSelector, useDispatch } from "react-redux"
 import { login, cleanErrors } from "../store/userSlice"
 import { RootState, AppDispatch } from "../store"
 import { useNavigate } from "react-router-dom"
-import { getJobseekerProfile } from "../store/jobSeekerSlice"
 
 type State = {
   email: string
@@ -42,15 +41,15 @@ const Login = () => {
 
   useEffect(() => {
     dispatch(cleanErrors())
-    isLogged && navigate('/jobseekerInfo')
+    isLogged && navigate('/loading')
   // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [])
 
   useEffect(() => {
     if (isLogged) {
       dispatch(cleanErrors())
-      hasProfile &&  dispatch(getJobseekerProfile(userId))
-      navigate('/jobseekerInfo') 
+      // hasProfile &&  dispatch(getJobseekerProfile(userId))
+      navigate('/loading') 
     } 
   })
 

@@ -1,5 +1,5 @@
-import CompanySearch from '../components/companies/companySearch'
-import CompaniesContainer from '../components/companies/companiesContainer'
+import CompanySearch from '../../components/jobseeker/companies/companySearch'
+import CompaniesContainer from '../../components/jobseeker/companies/companiesContainer'
 
 const data = [
   {

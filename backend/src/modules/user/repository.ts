@@ -23,7 +23,7 @@ export default class UserRepository implements IUserRepo {
 
   async exists(email: string, role: string): Promise<boolean> {
     const userRepo = this.userRepo(this.userEntity);
-    const result = await userRepo.findOneBy({ email: email, role: role });
+    const result = await userRepo.findOneBy({ email: email });
     return !!result;
   }
 
