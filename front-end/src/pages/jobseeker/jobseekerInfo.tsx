@@ -47,7 +47,7 @@ const JobseekerInfo = () => {
     first_name: jobseeker.first_name,
     last_name: jobseeker.last_name,
     email: hasProfile ? jobseeker.email : userEmail,
-    phone: jobseeker.phone ,
+    phone: jobseeker.phone,
     birthdate: jobseeker.birthdate,
     location: jobseeker.location,
     profile_title: jobseeker.profile_title,
@@ -70,10 +70,10 @@ const JobseekerInfo = () => {
     dispatch(updateProfile({ profileProps: values, hasProfile, id: values.id }));
   };
 
-  const handleChange =
-    (prop: keyof State) => (event: { target: { value: any } }) => {
+  const handleChange = (prop: keyof State) => 
+    (event: { target: { value: any } }) => {
       setValues({ ...values, [prop]: event.target.value });
-    };
+    }
 
   return (
     <Grid
@@ -281,7 +281,7 @@ const JobseekerInfo = () => {
           sx={{ width: "22ch", alignSelf: 'center' }}
           // disabled={!values.email || !values.password || !values.confirmPassword}
         >
-          Update
+          {hasProfile ? 'Update' : 'Create'}  
         </Button>
       </Container>
     </Grid>

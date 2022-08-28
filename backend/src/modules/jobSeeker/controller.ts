@@ -23,7 +23,7 @@ export default class JobSeekerController implements IJobSeekerController {
       if (!!dtoErrors) throw new ApiError(400, dtoErrors);
 
       const result = await this.service.createProfile(req.body);
-      res.status(201).json(result.payload);
+      res.status(201).json({ payload: result.payload, message: result.message });
     } catch (error) {
       next(error);
     }
@@ -46,7 +46,7 @@ export default class JobSeekerController implements IJobSeekerController {
       const id: number = +req.params.id
       const result = await this.service.updateProfile(req.body, id)
       result.success
-        ? res.status(200).json(result.payload)
+        ? res.status(200).json({ payload: result.payload, message: result.message })
         : res.status(204).json()
     } catch (error) {
       next(error)

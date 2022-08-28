@@ -10,7 +10,7 @@ interface IRequestCreateProfileDto {
   birthdate: Date | null;
   location: string | null;
   profile_title: string | null;
-  sector: number | null;
+  sector: string | null;
   linkedin: string | null
   website: string | null
   github: string | null
@@ -37,7 +37,7 @@ export class RequestCreateProfileDto extends AbstractDto implements IRequestCrea
 
   public location: string | null;
   public profile_title: string | null;
-  public sector: number | null;
+  public sector: string | null;
   public linkedin: string | null
   public website: string | null
   public github: string | null

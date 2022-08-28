@@ -3,6 +3,7 @@ import type { PayloadAction } from "@reduxjs/toolkit";
 import api from "../utils/api";
 import decodeToken from "../utils/decodeToken";
 import { updateProfile } from "./jobSeekerSlice";
+import { updateCompanyProfile } from "./companySlice";
 
 export type UserState = {
   token: string | null;
@@ -124,6 +125,9 @@ export const userSlice = createSlice({
       }
     });
     builder.addCase(updateProfile.fulfilled, (state) => {
+      state.hasProfile = true;
+    });
+    builder.addCase(updateCompanyProfile.fulfilled, (state) => {
       state.hasProfile = true;
     });
   },

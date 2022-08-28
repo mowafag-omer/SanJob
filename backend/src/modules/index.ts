@@ -6,7 +6,7 @@ const entities = { User, JobSeeker, Company }
 const routers = { 
   '/user': userRouter, 
   '/jobSeeker': jobSeekerRouter,
-  '/conmpany': companyRouter
+  '/company': companyRouter
 }
 
 export { entities, routers }

@@ -17,6 +17,7 @@ export type JobseekerState = {
   linkedin: string | null;
   website: string | null;
   github: string | null;
+  message: string | null
   loading: boolean;
   error: string | null;
   validationError: { field: string; message: string } | null;
@@ -52,6 +53,7 @@ const initialState: JobseekerState = {
   website: null,
   github: null,
   loading: false,
+  message: null,
   error: null,
   validationError: null,
 };
@@ -101,10 +103,9 @@ export const jobseekerSlice = createSlice({
     });
     builder.addCase(
       updateProfile.fulfilled,
-      (state, action: PayloadAction<any>) => {
-        console.log(action.payload);
+      (state, { payload }: PayloadAction<any>) => {
         
-        return {...state, ...action.payload, loading: false}
+        return {...state, ...payload.payload, message: payload.message, loading: false}
       }
     );
     builder.addCase(
@@ -132,7 +133,6 @@ export const jobseekerSlice = createSlice({
     builder.addCase(
       getJobseekerProfile.rejected, 
       (state, action: PayloadAction<any>) => {
-        console.log("action getProfile", action);
         state.loading = false;
         state.error = action.payload;
       }

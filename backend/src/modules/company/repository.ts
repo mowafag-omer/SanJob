@@ -9,6 +9,7 @@ export interface ICompanyRepository {
   create(company: companyProps): Promise<companyProps>
   read(id: number): Promise<companyProps | null>
   readAll(): Promise<any>
+  update(companyProfile: companyProps, id: number): Promise<companyProps | false>
 }
 
 export default class CompanyRepository {
@@ -27,7 +28,7 @@ export default class CompanyRepository {
 
   async read(id: number): Promise<companyProps | null> {
     const repo = this.companyRepo(this.entity)
-    return await repo.findOneBy({id: id})
+    return await repo.findOne({where: {user: {id}}, relations: ['user']})
   }
 
   async readAll(): Promise<any> {
@@ -35,16 +36,10 @@ export default class CompanyRepository {
     return await repo.find()
   }
 
-  // async update(companyProfile: companyProps): Promise<UpdateResult | false> {
-  //   const repo = this.companyRepo(this.entity)
-  //   const companyId = companyProfile.id
-  //   delete companyProfile.id
-  //   const result = await repo.createQueryBuilder()
-  //     .update({ ...companyProfile })
-  //     .where({ id: companyId })
-  //     .returning('*')
-  //     .execute()
+  async update(companyProfile: companyProps, id: number): Promise<companyProps | false> {
+    const repo = this.companyRepo(this.entity)
+    const result = await repo.save({id: id, ...companyProfile})
 
-  //   return result ? result : false
-  // }
+    return result ? result : false
+  }
 }

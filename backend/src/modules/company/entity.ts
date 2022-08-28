@@ -12,8 +12,8 @@ export default class Company {
   @Column()
   location: string;
 
-  @Column()
-  sector: number;
+  @Column({ array: true })
+  sector: string;
 
   @Column("text")
   presentation: string;
@@ -24,7 +24,7 @@ export default class Company {
   @Column()
   employees: number
 
-  @Column()
+  @Column({ nullable: true })
   website: string
 
   @OneToOne(() => User)

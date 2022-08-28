@@ -31,7 +31,7 @@ export default class JobSeeker {
   profile_title: string;
 
   @Column({ nullable: true })
-  sector: number;
+  sector: string;
 
   @Column({ nullable: true })
   linkedin: string;

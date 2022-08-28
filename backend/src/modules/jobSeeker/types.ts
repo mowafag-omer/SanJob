@@ -8,7 +8,7 @@ export type jobSeekerProps = {
   birthdate: string;
   location: string;
   profile_title: string;
-  sector: number;
+  sector: string;
   linkedin: string
   website: string
   github: string

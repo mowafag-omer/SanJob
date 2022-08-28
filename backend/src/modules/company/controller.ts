@@ -6,6 +6,7 @@ export interface ICompanyController {
   service: ICompanyService;
   createProfile(req: Request, res: Response, next: NextFunction): Promise<void>
   getProfile(req: Request, res: Response, next: NextFunction): Promise<void> 
+  updateProfile(req: Request, res: Response, next: NextFunction): Promise<void>
 }
 
 export default class CompanyController implements ICompanyController {
@@ -20,9 +21,9 @@ export default class CompanyController implements ICompanyController {
       //  const createProfileDto = new RequestCreateProfileDto(req.body);
       //  const dtoErrors = await createProfileDto.isValid(createProfileDto);
       // if (!!dtoErrors) throw new ApiError(400, dtoErrors);
-
+      req.body.sector = JSON.stringify(req.body.sector)
       const result = await this.service.createProfile(req.body);
-      res.status(201).json({ message: result.message });
+      res.status(201).json({ payload: result.payload, message: result.message });
     } catch (error) {
       next(error);
     }
@@ -39,4 +40,18 @@ export default class CompanyController implements ICompanyController {
       next(error)
     }
   }
+
+  async updateProfile(req: Request, res: Response, next: NextFunction) {
+    try {
+      const id: number = +req.params.id
+      req.body.sector = JSON.stringify(req.body.sector)
+      const result = await this.service.updateProfile(req.body, id)
+      result.success
+        ? res.status(200).json({ payload: result.payload, message: result.message })
+        : res.status(204).json()
+    } catch (error) {
+      next(error)
+    }
+  }
+
 }

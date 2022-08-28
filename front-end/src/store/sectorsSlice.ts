@@ -1,7 +1,7 @@
 import { createSlice } from "@reduxjs/toolkit";
 import type { PayloadAction } from "@reduxjs/toolkit";
 import api from "../utils/api";
-import filterSectorsNames from "../utils/filterSectorsNames";
+import getSectorsNames from "../utils/getSectorsNames";
 
 export type Sectors = {
   loading: boolean
@@ -42,8 +42,7 @@ export function fetchSectors() {
     dispatch(getSectors())
     try {
       const response = await api.get('https://api.trademe.co.nz/v1/Categories/Jobs.json')
-      console.log(response.data)
-      dispatch(getSectorsSuccess(filterSectorsNames(response.data)))
+      dispatch(getSectorsSuccess(getSectorsNames(response.data)))
     } catch (error) {
       dispatch(getSectorsFailure())
     }

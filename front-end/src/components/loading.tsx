@@ -3,6 +3,7 @@ import { useSelector, useDispatch } from "react-redux"
 import { RootState, AppDispatch } from "../store"
 import { useNavigate } from "react-router-dom"
 import { getJobseekerProfile } from "../store/jobSeekerSlice"
+import { getCompanyProfile } from '../store/companySlice'
 import {Box, LinearProgress} from '@mui/material/';
 
 const Loading = () => {
@@ -18,7 +19,6 @@ const Loading = () => {
   useEffect(() => {
     if (role === 'jobseeker') {
       !hasProfile && navigate('/jobseekerInfo')
-
       if (hasProfile) {
         dispatch(getJobseekerProfile(userId))
         navigate('/JobseekerDashboard')
@@ -27,11 +27,12 @@ const Loading = () => {
 
     if (role === 'company') {
       !hasProfile && navigate('/companyInfo')
+      if (hasProfile) {
+        console.log(userId);
 
-      // if (hasProfile) {
-      //   dispatch(getJobseekerProfile(userId))
-      //   navigate('/JobseekerDashboard')
-      // }
+        dispatch(getCompanyProfile(userId))
+        navigate('/companyInfo')
+      }
     }
   }, [dispatch, hasProfile, navigate, role, userId])
 
