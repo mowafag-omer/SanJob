@@ -36,7 +36,7 @@ export default class UserService implements IUserService {
       hasProfile: user.hasProfile
     }
     const access_token = jwt.sign(
-      { result },
+      result,
       config.JWT_SECRET,
       { expiresIn: "2h" }
     );

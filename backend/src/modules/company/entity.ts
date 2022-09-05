@@ -12,7 +12,7 @@ export default class Company {
   @Column()
   location: string;
 
-  @Column({ array: true })
+  @Column()
   sector: string;
 
   @Column("text")
@@ -25,9 +25,9 @@ export default class Company {
   employees: number
 
   @Column({ nullable: true })
-  website: string
+  website: string 
 
-  @OneToOne(() => User)
+  @OneToOne(() => User, { nullable: false, eager: true })
   @JoinColumn()
   user: User
 }

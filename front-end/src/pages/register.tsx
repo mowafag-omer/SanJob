@@ -58,7 +58,7 @@ const Register = () => {
 
   useEffect(() => {
     dispatch(cleanErrors())
-    isLogged && navigate('/jobseekerInfo')
+    isLogged && navigate('/')
   // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [])
 
@@ -66,7 +66,7 @@ const Register = () => {
     if (isLogged) {
       dispatch(cleanErrors())
       setValues({...values, email: "", password: "", confirmPassword: ""})
-      setTimeout(() => { return navigate('/jobseekerInfo') }, 2000)
+      setTimeout(() => { return navigate('/') }, 2000)
     } 
 
   // eslint-disable-next-line react-hooks/exhaustive-deps

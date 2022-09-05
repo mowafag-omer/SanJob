@@ -74,22 +74,22 @@ export const userSlice = createSlice({
     builder.addCase(register.pending, (state) => {
       state.loading = true;
     });
-    builder.addCase(register.fulfilled, (state, action: PayloadAction<any>) => {
-      const { email, hasProfile, id, role } = decodeToken(action.payload.token);
-
+    builder.addCase(register.fulfilled, (state, { payload }: PayloadAction<any>) => {
+      const { email, hasProfile, id, role } = decodeToken(payload.token);
+      console.log(decodeToken(payload.token));
+      
       return {
         ...state,
-        token: action.payload.token,
+        token: payload.token,
+        id,
         email,
         hasProfile,
-        id,
         role,
         isLogged: true,
         loading: false,
       };
     });
     builder.addCase(register.rejected, (state, action: PayloadAction<any>) => {
-      console.log("action", action);
       state.loading = false;
       if (typeof action.payload === "string") {
         state.error = action.payload;
@@ -106,10 +106,10 @@ export const userSlice = createSlice({
 
       return {
         ...state,
+        id,
         token: action.payload.token,
         email,
         hasProfile,
-        id,
         role,
         isLogged: true,
         loading: false,

@@ -1,5 +1,4 @@
 import { createSlice } from "@reduxjs/toolkit";
-import type { PayloadAction } from "@reduxjs/toolkit";
 import api from "../utils/api";
 import getSectorsNames from "../utils/getSectorsNames";
 

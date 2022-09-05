@@ -6,6 +6,7 @@ export interface ICompanyService {
   repo: ICompanyRepository
   createProfile(profiledata: companyProps): Promise<any>
   getProfileById(id: number): Promise<any>
+  getProfiles(): Promise<any>
   updateProfile(companyProfile: companyProps, id: number): Promise<any>
 }
 
@@ -27,6 +28,13 @@ export default class CompanyService implements ICompanyService{
     return result 
       ? { success: true, payload: result }
       : { success: false, message: "Profile not found !" }
+  }
+
+  async getProfiles(): Promise<any> {
+    const result = await this.repo.readAll()
+    return result 
+      ? { success: true, payload: result }
+      : { success: false, message: "No companies are found !" }
   }
 
   async updateProfile(companyProfile: companyProps, id: number): Promise<any> {

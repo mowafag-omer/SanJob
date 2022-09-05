@@ -12,3 +12,8 @@ code {
     monospace;
 }
 
+* {
+  /* box-sizing: border-box;
+  outline: 3px solid limegreen !important; */
+  /* background: rgb(0 100 0 / 0.1) !important; */
+}

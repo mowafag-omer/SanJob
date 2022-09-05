@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { AppBar, IconButton, Toolbar, Typography } from "@mui/material";
+import { AppBar, IconButton, Toolbar } from "@mui/material";
 import ArrowBackIcon from '@mui/icons-material/ArrowBack';
 import { useNavigate } from 'react-router-dom';
 
@@ -43,7 +43,7 @@ const style = {
     justifyContent: 'center',
     // alignContent: 'stretch',
     alignItems: {lg: 'center'},
-    height: 45,
+    // height: 45,
     bgcolor: '#f7f7f7',
     boxShadow: 0,
     transition: 'opacity ease 1s',

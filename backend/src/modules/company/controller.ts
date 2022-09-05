@@ -6,6 +6,7 @@ export interface ICompanyController {
   service: ICompanyService;
   createProfile(req: Request, res: Response, next: NextFunction): Promise<void>
   getProfile(req: Request, res: Response, next: NextFunction): Promise<void> 
+  getAllProfiles(req: Request, res: Response, next: NextFunction): Promise<void> 
   updateProfile(req: Request, res: Response, next: NextFunction): Promise<void>
 }
 
@@ -40,6 +41,17 @@ export default class CompanyController implements ICompanyController {
       next(error)
     }
   }
+
+  async getAllProfiles(req: Request, res: Response, next: NextFunction) {
+    try {
+      const result = await this.service.getProfiles()
+      result.success
+        ? res.status(200).json(result.payload)
+        : res.status(204).json()
+    } catch (error) {
+      next(error)
+    }
+  }  
 
   async updateProfile(req: Request, res: Response, next: NextFunction) {
     try {

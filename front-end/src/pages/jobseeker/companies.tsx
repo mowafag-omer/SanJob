@@ -1,5 +1,9 @@
 import CompanySearch from '../../components/jobseeker/companies/companySearch'
 import CompaniesContainer from '../../components/jobseeker/companies/companiesContainer'
+import { useDispatch, useSelector } from 'react-redux'
+import { AppDispatch, RootState } from '../../store'
+import { useEffect } from 'react'
+import { fetchCompanies } from '../../store/companiesSlice'
 
 const data = [
   {
@@ -37,10 +41,20 @@ const data = [
 ]
 
 const Companies = () => {
+  const dispatch: AppDispatch = useDispatch()
+  const companies = useSelector((state: RootState) => state.companies.companies)
+
+  useEffect(() => {
+    dispatch(fetchCompanies())
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [])
+
   return (
     <>
       <CompanySearch />
-      <CompaniesContainer companies={data} />
+      {!!companies.length && 
+        <CompaniesContainer companies={companies} />
+      }
     </>
   )
 }

@@ -41,7 +41,7 @@ const Login = () => {
 
   useEffect(() => {
     dispatch(cleanErrors())
-    isLogged && navigate('/loading')
+    isLogged && navigate('/')
   // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [])
 
@@ -49,7 +49,7 @@ const Login = () => {
     if (isLogged) {
       dispatch(cleanErrors())
       // hasProfile &&  dispatch(getJobseekerProfile(userId))
-      navigate('/loading') 
+      navigate('/') 
     } 
   })
 

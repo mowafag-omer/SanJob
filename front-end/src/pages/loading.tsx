@@ -5,6 +5,7 @@ import { useNavigate } from "react-router-dom"
 import { getJobseekerProfile } from "../store/jobSeekerSlice"
 import { getCompanyProfile } from '../store/companySlice'
 import {Box, LinearProgress} from '@mui/material/';
+import { fetchSectors } from '../store/sectorsSlice'
 
 const Loading = () => {
   const { id: userId, isLogged, hasProfile, role } = useSelector((state: RootState) => state.user)
@@ -12,25 +13,26 @@ const Loading = () => {
   const navigate = useNavigate()
 
   useEffect(() => {
-    !isLogged && navigate('/')
+    dispatch(fetchSectors())
+    !isLogged && navigate('/homePage')
   // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [])
 
   useEffect(() => {
     if (role === 'jobseeker') {
-      !hasProfile && navigate('/jobseekerInfo')
       if (hasProfile) {
         dispatch(getJobseekerProfile(userId))
         navigate('/JobseekerDashboard')
+      } else {
+        navigate('/jobseekerInfo')
       }
     }
 
     if (role === 'company') {
-      !hasProfile && navigate('/companyInfo')
       if (hasProfile) {
-        console.log(userId);
-
         dispatch(getCompanyProfile(userId))
+        navigate('/companyInfo')
+      } else {
         navigate('/companyInfo')
       }
     }
