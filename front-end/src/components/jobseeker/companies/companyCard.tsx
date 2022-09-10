@@ -7,11 +7,13 @@ import { Link } from 'react-router-dom';
 export type companyProps ={
   name: string
   sector: string
-  img: string
+  logo_url: string
   location: string
   employees: string
   jobs: number
 }
+
+const defaultImg = "https://images.squarespace-cdn.com/content/v1/568981602399a3a3e507fff4/1548253334574-W4OFLUFUXJKJBXNW2UDK/Asset+2%40300x.png"
 
 const CompanyCard = ({ company }: {company: companyProps}) => {
   return (
@@ -19,10 +21,9 @@ const CompanyCard = ({ company }: {company: companyProps}) => {
       <CardMedia 
         component="img"
         height="140"
-        sx={{ width: '70%', pt: 2 }}
-        image={company.img}
+        sx={{ width: '70%', pt: 2, objectFit: "contain" }}
+        image={company.logo_url || defaultImg}
       />
-      {/* <Divider sx={{ width: '90%', mt: 2 }} /> */}
       <CardContent sx={style.cardContent}>
         <Typography gutterBottom variant="h5" component="div">
           {company.name}
@@ -30,7 +31,7 @@ const CompanyCard = ({ company }: {company: companyProps}) => {
         <Stack sx={{...style.center, gap: 2}}>
           <Typography sx={style.info} variant="body1" color="text.secondary">
             <CategoryIcon  fontSize="small" />
-            {company.sector} 
+            {JSON.parse(company.sector).map((name: string) => name+" ")} 
           </Typography>
           <Typography sx={style.info} variant="body1" color="text.secondary">
             <LocationOnIcon fontSize="small" />

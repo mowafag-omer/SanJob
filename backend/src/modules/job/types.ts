@@ -2,7 +2,8 @@ export type jobProps = {
   id?: number;
   job_title: string;
   location: string;
-  contract_type: string;
+  contract_type: string[];
+  sector: string
   description: string
   requirement: string
   start_date: Date

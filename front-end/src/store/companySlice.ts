@@ -5,6 +5,7 @@ import { logout } from "./userSlice";
 
 export type CompanyState = {
   id: number | null
+  logo_url: string | null
   name: string | null
   location: string | null
   sector: string[]
@@ -19,6 +20,7 @@ export type CompanyState = {
 }
 
 export type CompanyProps = {
+  logo_url: string | null
   name: string | null
   location: string | null
   sector: string[] | null
@@ -30,13 +32,14 @@ export type CompanyProps = {
 
 const initialState: CompanyState = {
   id: null,
-  name: null,
-  location: null,
+  logo_url: null,
+  name: "",
+  location: "",
   sector: [],
-  presentation: null,
+  presentation: "",
   founding_year: null,
   employees: null,
-  website: null,
+  website: "",
   message: null,
   loading: false,
   error: null,
@@ -115,6 +118,7 @@ export const companySlice = createSlice({
     builder.addCase(
       getCompanyProfile.fulfilled,
       (state, { payload }: PayloadAction<any>) => {
+        payload.sector = JSON.parse(payload.sector)
         return {...state, ...payload, loading: false}
       }
     )

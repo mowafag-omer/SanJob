@@ -6,6 +6,9 @@ export default class JobSeeker {
   @PrimaryGeneratedColumn()
   id: number;
 
+  @Column("text", { nullable: true })
+  img_url: string
+
   @Column({ nullable: true })
   gender: string;
 

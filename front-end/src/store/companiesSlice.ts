@@ -21,6 +21,7 @@ export const companiesSlice = createSlice({
       state.loading = true
     },
     getCompaniesSuccess: (state, { payload }) => {
+      payload.forEach((company: any) =>  JSON.parse(company.sector))
       state.companies = payload
       state.loading = false
       state.hasErrors = false

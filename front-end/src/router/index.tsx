@@ -1,4 +1,5 @@
 import { BrowserRouter, Routes, Route } from "react-router-dom";
+import ProtectedRoute from "./PrivateRoute";
 import Layout from "../components/layout";
 import HomePage from "../pages/homePage";
 import Loading from "../pages/loading";
@@ -23,17 +24,38 @@ const Router = () => {
           <Route path="/register" element={<Register />} />
           <Route path="/login" element={<Login />} />
           <Route path="/jobs" element={<Jobs />} />
-          <Route path="/job" element={<Job />} />
+          <Route path="/job/:id" element={<Job />} />
           <Route path="/companies" element={<Companies />} />
-          <Route path="/JobseekerDashboard" element={<JobseekerDashboard />} />
+          <Route
+            path="/JobseekerDashboard"
+            element={
+              <ProtectedRoute role="jobseeker">
+                <JobseekerDashboard />
+              </ProtectedRoute>
+            }
+          />
           <Route path="/jobseekerInfo" element={<JobseekerInfo />} />
           <Route path="/companyInfo" element={<CompanyInfo />} />
-          <Route path="/companyDashboard" element={<CompanyDashboard />} />
-          <Route path="/postJob" element={<PostJob />} />
+          <Route
+            path="/companyDashboard"
+            element={
+              <ProtectedRoute role="company">
+                <CompanyDashboard />
+              </ProtectedRoute>
+            }
+          />
+          <Route
+            path="/postJob"
+            element={
+              <ProtectedRoute role="company">
+                <PostJob />
+              </ProtectedRoute>
+            }
+          />
         </Routes>
       </Layout>
     </BrowserRouter>
-  )
-}
+  );
+};
 
-export default Router
+export default Router;

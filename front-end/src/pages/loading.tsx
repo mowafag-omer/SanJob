@@ -4,7 +4,7 @@ import { RootState, AppDispatch } from "../store"
 import { useNavigate } from "react-router-dom"
 import { getJobseekerProfile } from "../store/jobSeekerSlice"
 import { getCompanyProfile } from '../store/companySlice'
-import {Box, LinearProgress} from '@mui/material/';
+import { Box, LinearProgress } from '@mui/material/';
 import { fetchSectors } from '../store/sectorsSlice'
 
 const Loading = () => {
@@ -31,7 +31,7 @@ const Loading = () => {
     if (role === 'company') {
       if (hasProfile) {
         dispatch(getCompanyProfile(userId))
-        navigate('/companyInfo')
+        navigate('/companyDashboard')
       } else {
         navigate('/companyInfo')
       }

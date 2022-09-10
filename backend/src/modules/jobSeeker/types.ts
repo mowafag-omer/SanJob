@@ -1,5 +1,6 @@
 export type jobSeekerProps = {
   id?: number
+  img_url: string
   gender: string;
   first_name: string;
   last_name: string;

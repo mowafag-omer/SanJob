@@ -16,11 +16,11 @@ const SubNav = ({ links }: Props) => {
         variant="scrollable"
         scrollButtons
         allowScrollButtonsMobile
-        aria-label="jobseeker nav"
       >
         {links.map(({ label, path }: {label:string, path: string}) => 
           <Tab 
-            key={path} 
+            key={path+'key'} 
+            value={null}
             label={label} 
             to={path} 
             component={Link} 

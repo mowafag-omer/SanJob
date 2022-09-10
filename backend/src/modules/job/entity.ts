@@ -1,4 +1,4 @@
-import { Entity, Column, PrimaryGeneratedColumn, OneToOne, JoinColumn } from "typeorm";
+import { Entity, Column, PrimaryGeneratedColumn, OneToOne, JoinColumn, ManyToOne } from "typeorm";
 import { Company } from "../company";
 
 @Entity("job")
@@ -12,8 +12,11 @@ export default class Job {
   @Column()
   location: string;
 
+  @Column('simple-array')
+  contract_type: string[]
+
   @Column()
-  contract_type: string;
+  sector: string
 
   @Column("text")
   description: string
@@ -24,14 +27,13 @@ export default class Job {
   @Column()
   start_date: Date
 
-  @Column("text")
-  hiring_process: string = "open"
+  @Column("text", { nullable: true })
+  hiring_process: string
 
-  @Column()
+  @Column({nullable: true, default: "open"})
   status: string
 
-  @OneToOne(() => Company)
-  @JoinColumn()
+  @ManyToOne(() => Company, (company) => company.jobs, { nullable: false, eager: true })
   company: Company
 
 }

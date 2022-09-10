@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useRef } from "react";
 import {
   Grid,
   Container,
@@ -14,7 +14,10 @@ import {
   Select,
   Autocomplete,
   Button,
+  Divider
 } from "@mui/material";
+import DeleteIcon from '@mui/icons-material/Delete';
+import ModeEditIcon from '@mui/icons-material/ModeEdit';
 import { useDispatch, useSelector } from "react-redux";
 import { RootState, AppDispatch } from "../../store";
 import { useNavigate } from "react-router-dom";
@@ -22,6 +25,7 @@ import { updateProfile } from "../../store/jobSeekerSlice";
 
 type State = {
   id: number | null
+  img_url: string | null
   gender: string | null;
   first_name: string | null
   last_name: string | null;
@@ -37,12 +41,15 @@ type State = {
   user: number | null;
 };
 
+const defaultImg = "https://upload.wikimedia.org/wikipedia/en/thumb/b/b1/Portrait_placeholder.png/512px-Portrait_placeholder.png"
+
 const JobseekerInfo = () => {
   const { user, jobseeker, sectors } = useSelector((state: RootState) => state);
   const { id: userId, email: userEmail, role, hasProfile } = user
 
   const [values, setValues] = useState<State>({
     id: jobseeker.id,
+    img_url: jobseeker.img_url,
     gender: jobseeker.gender,
     first_name: jobseeker.first_name,
     last_name: jobseeker.last_name,
@@ -58,6 +65,8 @@ const JobseekerInfo = () => {
     user: userId,
   });
 
+  const [showInput, setShowInput] = useState<boolean>(() => values.img_url ? false : true)
+  const ref = useRef<HTMLInputElement>()
   const dispatch: AppDispatch = useDispatch();
   const navigate = useNavigate();
 
@@ -68,6 +77,7 @@ const JobseekerInfo = () => {
   const handleSubmit = (event: React.ChangeEvent<HTMLFormElement>) => {
     event.preventDefault();
     dispatch(updateProfile({ profileProps: values, hasProfile, id: values.id }));
+    if(values.img_url) setShowInput(false)
   };
 
   const handleChange = (prop: keyof State) => 
@@ -84,21 +94,51 @@ const JobseekerInfo = () => {
       sx={style.gird}
     >
       <Container component="form" onSubmit={handleSubmit} sx={style.container}>
-        <FormControl>
-          <FormLabel>Profile picture</FormLabel>
-          <Box
-            component="img"
-            sx={{
-              height: 330,
-              width: 250,
-              maxHeight: { xs: 350, md: 250 },
-              maxWidth: { xs: 233, md: 167 },
-              borderRadius: 2,
-            }}
-            alt="Profile picture"
-            src="https://images.unsplash.com/photo-1512917774080-9991f1c4c750?auto=format&w=350&dpr=2"
-          />
-        </FormControl>
+        <Stack direction="column" spacing={2}>
+          <FormControl>
+            <FormLabel sx={{ position: 'relative' }}>Profile picture</FormLabel>
+            <Stack direction="row" sx={style.imgStack}>
+              <ModeEditIcon onClick={() => setShowInput(true)} />
+              <Divider orientation="vertical" flexItem />
+              <DeleteIcon 
+                onClick={() => { 
+                  setValues({...values, img_url: null})
+                  setShowInput(true)
+                  ref.current!.value = ""
+                }}  
+                color="error" 
+              />
+            </Stack>
+            <Box
+              component="img"
+              sx={{
+                height: 330,
+                width: 250,
+                maxHeight: { xs: 350, md: 250 },
+                maxWidth: { xs: 233, md: 167 },
+                borderRadius: 2,
+                objectFit: "contain"
+              }}
+              alt="Profile picture"
+              // src="https://images.unsplash.com/photo-1512917774080-9991f1c4c750?auto=format&w=350&dpr=2"
+              src={values.img_url || defaultImg}
+            />
+          </FormControl>
+          {showInput && 
+            <FormControl>
+              <FormLabel>Profile picture URL</FormLabel>
+              <TextField
+                type="url"
+                label=""
+                inputRef={ref}
+                value={values.img_url}
+                onChange={handleChange("img_url")}
+                variant="outlined"
+                size="small"
+              />
+            </FormControl>
+          }    
+        </Stack>
 
         <FormControl>
           <FormLabel id="gender-label">Gender</FormLabel>
@@ -305,4 +345,14 @@ const style = {
     gap: "5ch",
     bgcolor: "#fff",
   },
+  imgStack: { 
+    position: 'absolute', 
+    bottom: "5px",
+    left: "5px",
+    borderRadius: 2,
+    px: .4,
+    py: .2,
+    bgcolor: "#f7f7f7",
+    cursor: 'pointer' 
+  }
 };

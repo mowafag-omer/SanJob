@@ -18,6 +18,7 @@ export default class JobController implements IJobController {
 
   async postJob(req: Request, res: Response, next: NextFunction) {
     try {
+      req.body.contract_type = JSON.stringify(req.body.contract_type)
       const result = await this.service.postJob(req.body);
       res.status(201).json({ payload: result.payload, message: result.message });
     } catch (error) {
@@ -51,6 +52,7 @@ export default class JobController implements IJobController {
   async updateJob(req: Request, res: Response, next: NextFunction) {
     try {
       const id: number = +req.params.id
+      req.body.contract_type = JSON.stringify(req.body.contract_type)
       const result = await this.service.updateJob(req.body, id)
       result.success
         ? res.status(200).json({ payload: result.payload, message: result.message })

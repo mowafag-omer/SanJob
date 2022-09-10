@@ -1,11 +1,13 @@
-import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
+import { createSlice, createAsyncThunk, current } from "@reduxjs/toolkit";
 import type { PayloadAction } from "@reduxjs/toolkit";
 import api from "../utils/api";
 import { logout } from "./userSlice";
+import { SingleJobProps } from "../components/jobseeker/jobs/jobCard";
 
 export type JobsState = {
   loading: boolean
   jobs: []
+  jobById: any
   companyJobs: []
   message: string | null
   error: string | null;
@@ -16,7 +18,8 @@ export type JobProps = {
   id: number | null
   job_title: string | null
   location: string | null
-  contract_type: string | null
+  contract_type: string[] | null
+  sector: string | null
   description: string | null
   requirement: string | null
   start_date: Date | null
@@ -28,6 +31,7 @@ export type JobProps = {
 const initialState: JobsState = {
   loading: false,
   jobs: [],
+  jobById: null,
   companyJobs: [],
   message: null,
   error: null,
@@ -49,9 +53,9 @@ export const postJob = createAsyncThunk(
   }
 )
 
-export const getJobs = createAsyncThunk(
-  "jobs/getJobs", 
-  async({ rejectWithValue }: any) => {
+export const fetchJobs = createAsyncThunk(
+  "jobs/fetchJobs", 
+  async(_,{ rejectWithValue }: any) => {
     return await api
       .get(`/job/getAllJobs/`)
       .then((response: { data: any }) => response.data)
@@ -73,6 +77,10 @@ export const jobsSlie = createSlice({
   name: "jobs",
   initialState,
   reducers: {
+    getJobById: (state, { payload }) => {
+      const job = current(state).jobs.filter((job: SingleJobProps) => job.id === +payload)[0]
+      return {...state, jobById: job}
+    },
     cleanErrors: (state) => {
       state.error = null;
       state.validationError = null;
@@ -105,17 +113,17 @@ export const jobsSlie = createSlice({
       }
     )
 
-    builder.addCase(getJobs.pending, (state) => {
+    builder.addCase(fetchJobs.pending, (state) => {
       state.loading = true;
     })
     builder.addCase(
-      getJobs.fulfilled,
+      fetchJobs.fulfilled,
       (state, action: PayloadAction<any>) => {
         return {...state, jobs: action.payload, loading: false}
       }
     )
     builder.addCase(
-      getJobs.rejected, 
+      fetchJobs.rejected, 
       (state, action: PayloadAction<any>) => {
         state.loading = false;
         state.error = action.payload;
@@ -127,3 +135,6 @@ export const jobsSlie = createSlice({
     })
   }
 })
+
+export default jobsSlie.reducer
+export const { getJobById , cleanErrors, cleanMessages } = jobsSlie.actions

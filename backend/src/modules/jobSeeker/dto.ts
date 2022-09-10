@@ -1,7 +1,8 @@
-import { MinLength, MaxLength, IsString, IsDefined, IsEmail, IsIn, IsPhoneNumber, IsDate, IsDateString } from 'class-validator'
+import { MinLength, MaxLength, IsString, IsDefined, IsEmail, IsUrl, IsIn, IsPhoneNumber, IsDate, IsDateString } from 'class-validator'
 import { AbstractDto } from '../../helpers/abstractDto'
 
 interface IRequestCreateProfileDto {
+  img_url: string | null
   gender: string | null;
   first_name: string;
   last_name: string;
@@ -18,6 +19,7 @@ interface IRequestCreateProfileDto {
 }
 
 export class RequestCreateProfileDto extends AbstractDto implements IRequestCreateProfileDto {
+  public img_url: string | null
   public gender: string | null
 
   @IsDefined({ message: 'First name is required !'})

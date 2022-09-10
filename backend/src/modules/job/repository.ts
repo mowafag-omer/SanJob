@@ -39,7 +39,7 @@ export default class JobRepository {
 
   async readAll(): Promise<any> {
     const repo = this.jobRepo(this.entity)
-    return await repo.find()
+    return await repo.find({relations: ['company']})
   }
 
   async update(jobDetails: jobProps, id: number): Promise<jobProps | false> {

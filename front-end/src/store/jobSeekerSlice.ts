@@ -5,6 +5,7 @@ import { logout } from "./userSlice";
 
 export type JobseekerState = {
   id: number | null;
+  img_url: string | null
   gender: string | null;
   first_name: string | null;
   last_name: string | null;
@@ -24,6 +25,7 @@ export type JobseekerState = {
 };
 
 export type ProfileProps = {
+  img_url: string | null
   gender: string | null;
   first_name: string | null
   last_name: string | null;
@@ -40,6 +42,7 @@ export type ProfileProps = {
 
 const initialState: JobseekerState = {
   id: null,
+  img_url:  null,
   gender: null,
   first_name: null,
   last_name: null,

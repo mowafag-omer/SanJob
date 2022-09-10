@@ -1,3 +1,4 @@
+import { useEffect } from 'react'
 import {
   Grid,
   Container,
@@ -12,83 +13,87 @@ import HandshakeIcon from '@mui/icons-material/Handshake';
 import LocationOnIcon from '@mui/icons-material/LocationOn';
 import TodayIcon from '@mui/icons-material/Today';
 import JobNav from "../../components/jobseeker/job/jobNav";
+import { useDispatch, useSelector } from 'react-redux'
+import { AppDispatch, RootState } from '../../store'
+import { useParams } from 'react-router-dom'
+import { getJobById } from "../../store/jobsSlice";
 
 const Job = () => {
-  return (
-    <Grid sx={style.grid}>
-      <Box sx={style.banner}>
-        <Box sx={style.bannerContent}>
-          <CardMedia 
-            component="img"
-            image="https://cdn.dribbble.com/users/371199/screenshots/11891575/media/6df51f6e524e3918c4ccec381d4f4523.jpg?compress=1&resize=400x300"
-            alt="green iguana"
-            sx={{ width: 80, height: 80 }}
-          />
-          <Typography variant="h6" >Company</Typography>
-          <Typography variant="h3" >Dev front-end</Typography>
-          <Stack sx={style.stack}>
-            <Typography sx={style.typography} variant="body1" color="text.secondary">
-              <HandshakeIcon fontSize="small" />
-              Permanent contract 
-            </Typography>
-            <Typography sx={style.typography} variant="body1" color="text.secondary">
-              <LocationOnIcon fontSize="small" />
-              Paris
-            </Typography>
-            <Typography sx={style.typography} variant="body1" color="text.secondary">
-              <TodayIcon fontSize="small" />
-              2 days ago
-            </Typography>
-          </Stack>
-        </Box>
-        <JobNav />
-      </Box >
-      <Container sx={style.main}>
-        <Box>
-          <Typography variant="h5">
-            Company
-          </Typography>
-          <hr />
-          <Typography variant="body1">
-          Lorem ipsum dolor sit amet. In sint voluptates est quisquam dolore eum enim aperiam vel eaque temporibus eum quasi impedit? Sit accusamus nemo et doloribus sapiente est dolorem praesentium sit quia ipsum et aliquam fugit qui aliquid libero aut ipsam voluptas. Aut nemo inventore vel voluptatem ipsa et sequi cumque.
-          <br />
-          Sed velit nobis et praesentium itaque nam omnis odio et magni aliquid. Ut fuga velit et placeat optio qui sunt exercitationem et numquam pariatur excepturi eos ducimus aperiam et fuga veritatis? Enim dolores a quibusdam inventore non natus Quis et asperiores maxime!
-          </Typography>
+  const dispatch: AppDispatch = useDispatch()
+  const { id } = useParams() 
+  const { jobById: job } = useSelector((state: RootState) => state.jobs)
+  
+  useEffect(() => {
+    dispatch(getJobById(id))
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [])
 
-        </Box>
-        <Box>
-          <Typography variant="h5">
-            Job description
-          </Typography>
-          <hr />
-          <Typography variant="body1">
-          Lorem ipsum dolor sit amet. In sint voluptates est quisquam dolore eum enim aperiam vel eaque temporibus eum quasi impedit? Sit accusamus nemo et doloribus sapiente est dolorem praesentium sit quia ipsum et aliquam fugit qui aliquid libero aut ipsam voluptas. Aut nemo inventore vel voluptatem ipsa et sequi cumque.
-          Lorem ipsum dolor sit amet. In sint voluptates est quisquam dolore eum enim aperiam vel eaque temporibus eum quasi impedit? Sit accusamus nemo et doloribus sapiente est dolorem praesentium sit quia ipsum et aliquam fugit qui aliquid libero aut ipsam voluptas. Aut nemo inventore vel voluptatem ipsa et sequi cumque.
-          Lorem ipsum dolor sit amet. In sint voluptates est quisquam dolore eum enim aperiam vel eaque temporibus eum quasi impedit? Sit accusamus nemo et doloribus sapiente est dolorem praesentium sit quia ipsum et aliquam fugit qui aliquid libero aut ipsam voluptas. Aut nemo inventore vel voluptatem ipsa et sequi cumque.
-          Lorem ipsum dolor sit amet. In sint voluptates est quisquam dolore eum enim aperiam vel eaque temporibus eum quasi impedit? Sit accusamus nemo et doloribus sapiente est dolorem praesentium sit quia ipsum et aliquam fugit qui aliquid libero aut ipsam voluptas. Aut nemo inventore vel voluptatem ipsa et sequi cumque.
-          <br />
-          Sed velit nobis et praesentium itaque nam omnis odio et magni aliquid. Ut fuga velit et placeat optio qui sunt exercitationem et numquam pariatur excepturi eos ducimus aperiam et fuga veritatis? Enim dolores a quibusdam inventore non natus Quis et asperiores maxime!
-          </Typography>
-
-        </Box>
-        <Box>
-          <Typography variant="h5">
-            Job requirements
-          </Typography>
-          <hr />
-          <Typography variant="body1">
-          Lorem ipsum dolor sit amet. In sint voluptates est quisquam dolore eum enim aperiam vel eaque temporibus eum quasi impedit? Sit accusamus nemo et doloribus sapiente est dolorem praesentium sit quia ipsum et aliquam fugit qui aliquid libero aut ipsam voluptas. Aut nemo inventore vel voluptatem ipsa et sequi cumque.
-          <br />
-          Sed velit nobis et praesentium itaque nam omnis odio et magni aliquid. Ut fuga velit et placeat optio qui sunt exercitationem et numquam pariatur excepturi eos ducimus aperiam et fuga veritatis? Enim dolores a quibusdam inventore non natus Quis et asperiores maxime!
-          </Typography>
-
-        </Box>
-      </Container>
-      <Button size="large" variant="contained" sx={style.button}>
-        Apply
-      </Button>
-    </Grid>
-  )
+  return (<>
+    {job &&
+      <Grid sx={style.grid}>
+        <Box sx={style.banner}>
+          <Box sx={style.bannerContent}>
+            <CardMedia 
+              component="img"
+              image="https://cdn.dribbble.com/users/371199/screenshots/11891575/media/6df51f6e524e3918c4ccec381d4f4523.jpg?compress=1&resize=400x300"
+              alt="green iguana"
+              sx={{ width: 80, height: 80 }}
+            />
+            <Typography variant="h6" >{job.company.name}</Typography>
+            <Typography variant="h3" >{job.job_title}</Typography>
+            <Stack sx={style.stack}>
+              <Typography sx={style.typography} variant="body1" color="text.secondary">
+                <HandshakeIcon fontSize="small" />
+                {JSON.parse(job.contract_type).join(", ")}
+              </Typography>
+              <Typography sx={style.typography} variant="body1" color="text.secondary">
+                <LocationOnIcon fontSize="small" />
+                {job.location}
+              </Typography>
+              <Typography sx={style.typography} variant="body1" color="text.secondary">
+                <TodayIcon fontSize="small" />
+                {new Date(job.start_date).toLocaleString().split(', 12:00:00 AM')}
+              </Typography>
+            </Stack>
+          </Box>
+          <JobNav />
+        </Box >
+        <Container sx={style.main}>
+          <Box>
+            <Typography variant="h5">
+              Company
+            </Typography>
+            <hr />
+            <Typography variant="body1">
+              {job.company.presentation} 
+            </Typography>
+          </Box>
+          <Box>
+            <Typography variant="h5">
+              Job description
+            </Typography>
+            <hr />
+            <Typography variant="body1">
+              {job.description}
+            </Typography>
+          </Box>
+          <Box>
+            <Typography variant="h5">
+              Job requirements
+            </Typography>
+            <hr />
+            <Typography variant="body1">
+              {job.requirement}
+            </Typography>
+  
+          </Box>
+        </Container>
+        <Button size="large" variant="contained" sx={style.button}>
+          Apply
+        </Button>
+      </Grid>
+    }
+  </>)
 }
 
 export default Job

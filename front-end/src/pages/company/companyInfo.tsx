@@ -1,13 +1,18 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useRef } from "react";
 import {
   Grid,
   Container,
+  Box,
+  Stack,
   FormControl,
   TextField,
   FormLabel,
   Autocomplete,
+  Divider,
   Button,
 } from "@mui/material";
+import DeleteIcon from '@mui/icons-material/Delete';
+import ModeEditIcon from '@mui/icons-material/ModeEdit';
 import { DatePicker } from "@mui/x-date-pickers/DatePicker";
 import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
 import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
@@ -19,6 +24,7 @@ import FeedBack from "../../components/feedBack";
 
 type State = {
   id: number | null;
+  logo_url: string | null
   name: string | null;
   location: string | null;
   sector: string[];
@@ -29,12 +35,15 @@ type State = {
   user: number | null;
 };
 
+const defaultImg = "https://images.squarespace-cdn.com/content/v1/568981602399a3a3e507fff4/1548253334574-W4OFLUFUXJKJBXNW2UDK/Asset+2%40300x.png"
+
 const CompanyInfo = () => {
   const { user, company, sectors } = useSelector((state: RootState) => state);
   const { id: userId, hasProfile } = user;
 
   const [values, setValues] = useState<State>({
     id: company.id,
+    logo_url: company.logo_url,
     name: company.name,
     location: company.location,
     sector: company.sector,
@@ -47,10 +56,13 @@ const CompanyInfo = () => {
 
   const dispatch: AppDispatch = useDispatch();
   const navigate = useNavigate();
+  const ref = useRef<HTMLInputElement>()
 
+  
   useEffect(() => {
     setValues({
       id: company.id,
+      logo_url: company.logo_url,
       name: company.name,
       location: company.location,
       sector: company.sector,
@@ -62,12 +74,14 @@ const CompanyInfo = () => {
     })
   }, [company, userId])
   
+  const [showInput, setShowInput] = useState<boolean>(() => values.logo_url ? false : true)
+
   const handleSubmit = (event: React.ChangeEvent<HTMLFormElement>) => {
     event.preventDefault();
     dispatch(
       updateCompanyProfile({ profileProps: values, hasProfile, id: values.id })
     );
-
+    if(values.logo_url) setShowInput(false)  
     setTimeout(() => dispatch(cleanMessages()), 3000);
   };
 
@@ -86,6 +100,51 @@ const CompanyInfo = () => {
     >
       <Container component="form" onSubmit={handleSubmit} sx={style.container}>
         {company.message && <FeedBack children={company.message} />}
+
+        <Stack direction="column" spacing={2}>
+          <FormControl>
+            <FormLabel sx={{ position: 'relative' }}>Profile picture</FormLabel>
+            <Stack direction="row" sx={style.imgStack}>
+              <ModeEditIcon onClick={() => setShowInput(true)} />
+              <Divider orientation="vertical" flexItem />
+              <DeleteIcon 
+                onClick={() => { 
+                  setValues({...values, logo_url: null})
+                  setShowInput(true)
+                  ref.current!.value = ""
+                }}  
+                color="error" 
+              />
+            </Stack>
+            <Box
+              component="img"
+              sx={{
+                height: 330,
+                width: 250,
+                maxHeight: { xs: 350, md: 250 },
+                maxWidth: { xs: 233, md: 167 },
+                borderRadius: 2,
+                objectFit: "contain"
+              }}
+              alt="Profile picture"
+              src={values.logo_url || defaultImg}
+            />
+          </FormControl>
+          {showInput && 
+            <FormControl>
+              <FormLabel>Profile picture URL</FormLabel>
+              <TextField
+                type="url"
+                label=""
+                inputRef={ref}
+                value={values.logo_url}
+                onChange={handleChange("logo_url")}
+                variant="outlined"
+                size="small"
+              />
+            </FormControl>
+          }    
+        </Stack>
 
         <FormControl>
           <FormLabel>Company name *</FormLabel>
@@ -223,4 +282,14 @@ const style = {
     gap: "5ch",
     bgcolor: "#fff",
   },
+  imgStack: { 
+    position: 'absolute', 
+    bottom: "5px",
+    left: "5px",
+    borderRadius: 2,
+    px: .4,
+    py: .2,
+    bgcolor: "#f7f7f7",
+    cursor: 'pointer' 
+  }
 };

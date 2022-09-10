@@ -170,7 +170,7 @@ const style = {
     alignItems: "center",
     padding: 2,
     minHeight: 400,
-    marginTop: 8,
+    marginTop: 4,
     boxShadow: 2,
     borderRadius: '5px'
   },

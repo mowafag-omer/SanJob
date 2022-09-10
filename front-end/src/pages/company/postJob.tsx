@@ -18,20 +18,25 @@ import {
 import { useDispatch, useSelector } from "react-redux";
 import { RootState, AppDispatch } from "../../store";
 import { useNavigate } from "react-router-dom";
-import { postJob, JobProps } from "../../store/jobsSlice";
+import { postJob, JobProps, cleanMessages } from "../../store/jobsSlice";
+import FeedBack from "../../components/feedBack";
 
 const PostJob = () => {
+  const { sectors, company, jobs } = useSelector((state: RootState) => state)
+  const sectorsList = sectors.sectors
+
   const [values, setValues] = useState<JobProps>({
     id: null,
     job_title: null,
     location: null,
-    contract_type: null,
+    contract_type: [],
+    sector: null,
     description: null,
     requirement: null,
     start_date: null,
     hiring_process: null,
     status: null,
-    company: null,
+    company: company.id,
   })
 
   const dispatch: AppDispatch = useDispatch();
@@ -39,6 +44,7 @@ const PostJob = () => {
   const handleSubmit = (event: React.ChangeEvent<HTMLFormElement>) => {
     event.preventDefault()
     dispatch(postJob({ jobProps: values, id: values.id }));
+    setTimeout(() => dispatch(cleanMessages()), 3000);
   }
 
   const handleChange = (prop: keyof JobProps) => 
@@ -55,6 +61,8 @@ const PostJob = () => {
       sx={style.gird}
     >
       <Container component="form" onSubmit={handleSubmit} sx={style.container}>
+      {jobs.message && <FeedBack children={jobs.message} />}
+
       <FormControl>
         <FormLabel>Job title *</FormLabel>
           <TextField
@@ -88,6 +96,7 @@ const PostJob = () => {
         <FormControl id="contract">
           <FormLabel>Contract type *</FormLabel>
           <Select
+            multiple
             value={values.contract_type}
             label=""
             size="small"
@@ -96,6 +105,22 @@ const PostJob = () => {
           >
             <MenuItem value="CDI">CDI</MenuItem>
             <MenuItem value="CDD">CDD</MenuItem>
+          </Select>
+        </FormControl>
+
+        <FormControl>
+          <FormLabel>Sector *</FormLabel>
+          <Select
+            value={values.sector}
+            label=""
+            size="small"
+            onChange={handleChange("sector")}
+            sx={{ width: 223 }}
+          >
+            <MenuItem value=""></MenuItem>
+            {sectorsList.map((sector: string) => (
+              <MenuItem key={sector} value={sector}>{sector}</MenuItem>
+            ))}
           </Select>
         </FormControl>
 
@@ -150,7 +175,6 @@ const PostJob = () => {
             size="small"
             multiline
             rows={6}
-            required
           />
         </FormControl>
 
