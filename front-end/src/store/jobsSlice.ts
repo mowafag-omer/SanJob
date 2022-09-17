@@ -23,6 +23,7 @@ export type JobProps = {
   description: string | null
   requirement: string | null
   start_date: Date | null
+  posted_at: string
   hiring_process: string | null
   status: string | null
   company: number | null
@@ -43,9 +44,11 @@ export const postJob = createAsyncThunk(
   async ({ jobProps, id }: { jobProps: JobProps; id: number | null},
     { rejectWithValue }
   ) => {
+    console.log(jobProps);
+    
     return await api
       .post(
-        `/job/${id ? "updateJob/"+id : "postJob"}`,
+        `/jobOffer/${id ? "updateJobOffer/"+id : "postJobOffer"}`,
         jobProps
       )
       .then((response: { data: any }) => response.data)
@@ -57,7 +60,7 @@ export const fetchJobs = createAsyncThunk(
   "jobs/fetchJobs", 
   async(_,{ rejectWithValue }: any) => {
     return await api
-      .get(`/job/getAllJobs/`)
+      .get(`/jobOffer/getAllJobOffers/`)
       .then((response: { data: any }) => response.data)
       .catch((error) => rejectWithValue(error.response.data))
   }
@@ -67,7 +70,7 @@ export const getCompanyJobs = createAsyncThunk(
   "jobs/getCompanyJobs", 
   async(companyId: number | null, { rejectWithValue }) => {
     return await api
-      .get(`/job/getCompanyJobs/${companyId}`)
+      .get(`/jobOffer/getCompanyJobOffers/${companyId}`)
       .then((response: { data: any }) => response.data)
       .catch((error) => rejectWithValue(error.response.data));
   }
@@ -96,19 +99,17 @@ export const jobsSlie = createSlice({
     builder.addCase(
       postJob.fulfilled,
       (state, { payload }: PayloadAction<any>) => {
-        payload.payload.sector = JSON.parse(payload.payload.sector)
         return {...state, message: payload.message, loading: false}
       }
     )
     builder.addCase(
       postJob.rejected, 
-      (state, action: PayloadAction<any>) => {
-        console.log("action", action);
+      (state, { payload }: PayloadAction<any>) => {
         state.loading = false;
-        if (typeof action.payload === "string") {
-          state.error = action.payload;
+        if (typeof payload === "string") {
+          state.error = payload;
         } else {
-          state.validationError = action.payload;
+          state.validationError = payload;
         }
       }
     )
@@ -118,8 +119,8 @@ export const jobsSlie = createSlice({
     })
     builder.addCase(
       fetchJobs.fulfilled,
-      (state, action: PayloadAction<any>) => {
-        return {...state, jobs: action.payload, loading: false}
+      (state, { payload }: PayloadAction<any>) => {
+        return {...state, jobs: payload, loading: false}
       }
     )
     builder.addCase(

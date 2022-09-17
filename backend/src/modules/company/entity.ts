@@ -1,5 +1,5 @@
 import { Entity, Column, PrimaryGeneratedColumn, OneToOne, JoinColumn, OneToMany } from "typeorm";
-import { Job } from "../job";
+import { JobOffer } from "../jobOffer";
 import { User } from "../user";
 
 @Entity("company")
@@ -35,6 +35,6 @@ export default class Company {
   @JoinColumn()
   user: User
 
-  @OneToMany(() => Job, (job) => job.company)
-  jobs: Job[]
+  @OneToMany(() => JobOffer, (jobOffer) => jobOffer.company)
+  jobOffers: JobOffer[]
 }

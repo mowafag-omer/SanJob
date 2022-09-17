@@ -15,6 +15,7 @@ interface IRequestCreateProfileDto {
   linkedin: string | null
   website: string | null
   github: string | null
+  CV: string
   user: number
 }
 
@@ -43,7 +44,7 @@ export class RequestCreateProfileDto extends AbstractDto implements IRequestCrea
   public linkedin: string | null
   public website: string | null
   public github: string | null
-
+  public CV: string
   @IsDefined({ message: 'User is required !'})
   public user: number
 
@@ -62,6 +63,7 @@ export class RequestCreateProfileDto extends AbstractDto implements IRequestCrea
     this.linkedin = props.linkedin || null
     this.website = props.website || null
     this.github = props.github || null
+    this.CV = props.CV
     this.user = props.user
   }
 }

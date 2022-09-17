@@ -53,7 +53,7 @@ const Register = () => {
   })
 
   const dispatch: AppDispatch = useDispatch()
-  const { isLogged, error, validationError } = useSelector((state: RootState) => state.user)
+  const { isLogged, message, error, validationError } = useSelector((state: RootState) => state.user)
   const navigate = useNavigate()
 
   useEffect(() => {
@@ -124,7 +124,7 @@ const Register = () => {
       justifyContent="center"
       alignItems="center"
     >
-      {isLogged && <FeedBack children='done !' />}
+      {isLogged && <FeedBack children={message} />}
       <Box
         component="form"
         onSubmit={handleSubmit}

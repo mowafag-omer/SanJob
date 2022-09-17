@@ -4,6 +4,7 @@ import cookieParser from "cookie-parser";
 import morgan from "morgan";
 import logger from "./logger";
 import errorHandler from "./errorHandler";
+import fileUpload from "express-fileupload"
 
 // create a Morgan middleware instance
 const morganMiddleware = morgan("combined", {
@@ -16,11 +17,19 @@ const morganMiddleware = morgan("combined", {
 });
 
 const middlewares = {
-  json: express.json(),
-  urlencoded: express.urlencoded({ extended: false }),
+  json: express.json({limit: '3mb'}),
+  urlencoded: express.urlencoded({ limit: '3mb', extended: false }),
   cookie: cookieParser(),
-  // cors: cors(),
-  cors: cors({origin:'http://localhost:3000', credentials:true, exposedHeaders: 'Authorization'}),
+  cors: cors({
+    origin:'http://localhost:3000', 
+    credentials:true, 
+    exposedHeaders: 'Authorization'
+  }),
+  fileUpload: fileUpload({
+    // useTempFiles : false, 
+    parseNested: true,
+    limits: { fileSize: 3 * 1024 * 1024 }
+  }),
   apiLogger: morganMiddleware,
 };
 

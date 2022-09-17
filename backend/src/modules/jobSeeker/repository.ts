@@ -1,14 +1,14 @@
 import { EntityTarget, Repository } from "typeorm";
 import JobSeeker from "./entity";
 import { getEntityRepository } from "../../helpers/getentityRepository";
-import { jobSeekerProps } from "./types";
+import { jobSeekerProps, jobSeekerUpdateProps } from "./types";
 
 export interface IJobSeekerRepository {
   jobSeekerEntity: EntityTarget<JobSeeker>
   jobSeekerRepo: (entity: EntityTarget<JobSeeker>) => Repository<JobSeeker>
   create(jobSeeker: jobSeekerProps): Promise<jobSeekerProps>
   read(id: number): Promise<jobSeekerProps | null>
-  update(jobSeeker: jobSeekerProps, id: number): Promise<jobSeekerProps | false>
+  update(jobSeeker: jobSeekerUpdateProps, id: number): Promise<jobSeekerProps | false>
 }
 
 export default class JobSeekerRepository implements IJobSeekerRepository {
@@ -30,10 +30,16 @@ export default class JobSeekerRepository implements IJobSeekerRepository {
     return await repo.findOne({where: {user: {id}}, relations: ['user']})
   }
 
-  async update(jobSeekerProfile: jobSeekerProps, id: number): Promise<jobSeekerProps | false> {
+  async update(jobSeekerProfile: jobSeekerUpdateProps, id: number): Promise<jobSeekerProps | false> {
     const repo = this.jobSeekerRepo(this.jobSeekerEntity);
-    const result = await repo.save({id: id, ...jobSeekerProfile})
+    console.log("///////////jobSeekerProfile///////////////////////");
+    console.log(jobSeekerProfile);
+
+    await repo.save({id: id, ...jobSeekerProfile})
+    const result = await repo.findOne({where: {id}})
     
+    console.log("//////////////////////////////////");
+    console.log(result);
     return result ? result : false
   }
 }

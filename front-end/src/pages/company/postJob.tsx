@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
 import {
   Grid,
   Container,
@@ -34,17 +34,22 @@ const PostJob = () => {
     description: null,
     requirement: null,
     start_date: null,
+    posted_at: "",
     hiring_process: null,
     status: null,
     company: company.id,
   })
 
   const dispatch: AppDispatch = useDispatch();
+  const navigate = useNavigate()
 
   const handleSubmit = (event: React.ChangeEvent<HTMLFormElement>) => {
     event.preventDefault()
     dispatch(postJob({ jobProps: values, id: values.id }));
-    setTimeout(() => dispatch(cleanMessages()), 3000);
+    setTimeout(() => {
+      dispatch(cleanMessages())
+      navigate('/companyDashboard')
+    }, 3000);
   }
 
   const handleChange = (prop: keyof JobProps) => 

@@ -36,7 +36,7 @@ const Login = () => {
   })
   
   const dispatch: AppDispatch = useDispatch()
-  const { id: userId, isLogged, hasProfile, error } = useSelector((state: RootState) => state.user)
+  const { isLogged, error } = useSelector((state: RootState) => state.user)
   const navigate = useNavigate()
 
   useEffect(() => {
@@ -48,7 +48,6 @@ const Login = () => {
   useEffect(() => {
     if (isLogged) {
       dispatch(cleanErrors())
-      // hasProfile &&  dispatch(getJobseekerProfile(userId))
       navigate('/') 
     } 
   })

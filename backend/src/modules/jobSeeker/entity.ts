@@ -1,4 +1,5 @@
-import { Entity, Column, PrimaryGeneratedColumn, OneToOne, JoinColumn } from "typeorm";
+import { Entity, Column, PrimaryGeneratedColumn, OneToOne, JoinColumn, OneToMany } from "typeorm";
+import { Application } from "../application";
 import { User } from "../user";
 
 @Entity("job_seeker")
@@ -36,6 +37,9 @@ export default class JobSeeker {
   @Column({ nullable: true })
   sector: string;
 
+  @Column({nullable: true, type: "longblob"})
+  CV: string
+
   @Column({ nullable: true })
   linkedin: string;
 
@@ -45,7 +49,11 @@ export default class JobSeeker {
   @Column({ nullable: true })
   github: string;
 
+
   @OneToOne(() => User, { nullable: false, eager: true })
   @JoinColumn()
   user: User
+
+  @OneToMany(() => Application, (applicatoin) => applicatoin.jobSeeker)
+  applications: Application[]
 }

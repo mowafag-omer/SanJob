@@ -22,7 +22,7 @@ const Loading = () => {
     if (role === 'jobseeker') {
       if (hasProfile) {
         dispatch(getJobseekerProfile(userId))
-        navigate('/JobseekerDashboard')
+        navigate('/jobs')
       } else {
         navigate('/jobseekerInfo')
       }

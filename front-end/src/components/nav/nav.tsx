@@ -30,6 +30,8 @@ const pages = [
 
 const jsettings = [
   {name: 'Profile', path: '/jobseekerInfo'}, 
+  {name: 'Dashboard', path: '/JobseekerDashboard'}, 
+  {name: 'My applications', path: '#'}, 
   {name: 'Account', path: '#'}, 
   {name: 'Logout', path: '#'}
 ];

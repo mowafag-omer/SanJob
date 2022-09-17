@@ -136,7 +136,7 @@ const style = {
     width: {md: '900px'},
     display: 'flex',
     flexDirection: 'column',
-    alignItems: 'center',
+    alignItems: 'flex-start',
     gap: '5ch'
   },
   card : {

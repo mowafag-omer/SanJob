@@ -6,6 +6,7 @@ import {
   Stack,
   FormControl,
   TextField,
+  Input,
   FormLabel,
   RadioGroup,
   FormControlLabel,
@@ -13,6 +14,7 @@ import {
   MenuItem,
   Select,
   Autocomplete,
+  Typography,
   Button,
   Divider
 } from "@mui/material";
@@ -21,10 +23,12 @@ import ModeEditIcon from '@mui/icons-material/ModeEdit';
 import { useDispatch, useSelector } from "react-redux";
 import { RootState, AppDispatch } from "../../store";
 import { useNavigate } from "react-router-dom";
-import { updateProfile } from "../../store/jobSeekerSlice";
+import { updateProfile, cleanMessages } from "../../store/jobSeekerSlice";
+import FeedBack from "../../components/feedBack";
+import AddCV from "../../components/jobseeker/jobseekerInfo/addCV";
+import DeleteCV from "../../components/jobseeker/jobseekerInfo/deleteCV";
 
 type State = {
-  id: number | null
   img_url: string | null
   gender: string | null;
   first_name: string | null
@@ -46,9 +50,9 @@ const defaultImg = "https://upload.wikimedia.org/wikipedia/en/thumb/b/b1/Portrai
 const JobseekerInfo = () => {
   const { user, jobseeker, sectors } = useSelector((state: RootState) => state);
   const { id: userId, email: userEmail, role, hasProfile } = user
+  const { message, CV } = jobseeker
 
   const [values, setValues] = useState<State>({
-    id: jobseeker.id,
     img_url: jobseeker.img_url,
     gender: jobseeker.gender,
     first_name: jobseeker.first_name,
@@ -65,6 +69,8 @@ const JobseekerInfo = () => {
     user: userId,
   });
 
+  const [showCVForm, setShowCVForm] = useState(false);
+
   const [showInput, setShowInput] = useState<boolean>(() => values.img_url ? false : true)
   const ref = useRef<HTMLInputElement>()
   const dispatch: AppDispatch = useDispatch();
@@ -76,24 +82,28 @@ const JobseekerInfo = () => {
 
   const handleSubmit = (event: React.ChangeEvent<HTMLFormElement>) => {
     event.preventDefault();
-    dispatch(updateProfile({ profileProps: values, hasProfile, id: values.id }));
+    dispatch(updateProfile({ profileProps: values, hasProfile, id: jobseeker.id }));
     if(values.img_url) setShowInput(false)
+    setTimeout(() => dispatch(cleanMessages()), 3000);
   };
 
   const handleChange = (prop: keyof State) => 
     (event: { target: { value: any } }) => {
-      setValues({ ...values, [prop]: event.target.value });
+      setValues({ ...values, [prop]: event.target.value })
     }
 
   return (
     <Grid
       container
-      direction="row"
+      direction="column"
       justifyContent="center"
       alignItems="center"
       sx={style.gird}
-    >
+    > 
+      {showCVForm && <AddCV id={jobseeker.id} setShowCVForm={setShowCVForm} />}
+
       <Container component="form" onSubmit={handleSubmit} sx={style.container}>
+      {message && <FeedBack children={message} />}
         <Stack direction="column" spacing={2}>
           <FormControl>
             <FormLabel sx={{ position: 'relative' }}>Profile picture</FormLabel>
@@ -120,7 +130,6 @@ const JobseekerInfo = () => {
                 objectFit: "contain"
               }}
               alt="Profile picture"
-              // src="https://images.unsplash.com/photo-1512917774080-9991f1c4c750?auto=format&w=350&dpr=2"
               src={values.img_url || defaultImg}
             />
           </FormControl>
@@ -269,12 +278,34 @@ const JobseekerInfo = () => {
               onChange={handleChange("sector")}
             >
               <MenuItem value={0}></MenuItem>
-              {sectors.sectors.map((sector) => (
+              {sectors.sectors.map((sector: any) => (
                 <MenuItem key={sector} value={sector}>{sector}</MenuItem>
               ))}
             </Select>
           </FormControl>
         </Stack>
+        
+        {hasProfile && 
+          <FormControl>
+            <FormLabel>CV</FormLabel>
+            {CV 
+              ? <Stack direction="row" gap={2}>
+                  <Button sx={style.button3} variant="outlined" onClick={() => {
+                    const fileURL = URL.createObjectURL(CV)
+                    window.open(fileURL)
+                  }}>
+                    View your CV 
+                  </Button>
+                  
+                  <DeleteCV id={jobseeker.id} />
+
+                  <Button sx={style.button2} onClick={() => setShowCVForm(true) }>Replace CV</Button>
+                </Stack> 
+              : <Button sx={style.button} onClick={() => setShowCVForm(true) }>add your CV</Button>
+            }
+            
+          </FormControl>
+        }
 
         <FormControl id="linkedin" size="small">
           <FormLabel>Linkedin</FormLabel>
@@ -318,7 +349,7 @@ const JobseekerInfo = () => {
         <Button
           type="submit"
           variant="contained"
-          sx={{ width: "22ch", alignSelf: 'center' }}
+          sx={{ width: "22ch", alignSelf: 'center', ...style.button }}
           // disabled={!values.email || !values.password || !values.confirmPassword}
         >
           {hasProfile ? 'Update' : 'Create'}  
@@ -354,5 +385,25 @@ const style = {
     py: .2,
     bgcolor: "#f7f7f7",
     cursor: 'pointer' 
-  }
+  },
+  button: {
+    background: "#2b3247",
+    color: "#fff",
+    '&:hover': {
+      background: "#2b3247",
+      opacity: "85%"
+    }, 
+  },
+  button2: {
+    background: '#ffc107', 
+    color: 'black' 
+  },
+  button3: {
+    color: "#2b3247",
+    borderColor: "#2b3247",
+    '&:hover': {
+      background: "#d4d6da",
+      borderColor: "#2b3247",
+    }, 
+  },
 };

@@ -12,6 +12,7 @@ export type UserState = {
   role: string | null;
   isLogged: boolean;
   hasProfile: boolean;
+  message: string
   loading: boolean;
   error: string | null;
   validationError: { field: string; message: string } | null;
@@ -34,6 +35,7 @@ const initialState: UserState = {
   email: null,
   role: null,
   hasProfile: false,
+  message: '',
   isLogged: false,
   loading: false,
   error: null,
@@ -85,6 +87,7 @@ export const userSlice = createSlice({
         email,
         hasProfile,
         role,
+        message: payload.message,
         isLogged: true,
         loading: false,
       };

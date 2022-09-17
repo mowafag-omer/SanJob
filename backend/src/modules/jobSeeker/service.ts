@@ -1,12 +1,12 @@
 import { IJobSeekerRepository } from "./repository";
-import { jobSeekerProps, ServicReturnType } from "./types";
+import { jobSeekerProps, jobSeekerUpdateProps, ServicReturnType } from "./types";
 import { userRepo } from '../user'
 
 export interface IJobSeekerService {
   repo: IJobSeekerRepository
   createProfile(jobSeekerdata: jobSeekerProps): Promise<ServicReturnType>
   getProfileById(id: number): Promise<any>
-  updateProfile (jobSeekerdata: jobSeekerProps, id: number): Promise<ServicReturnType>
+  updateProfile (jobSeekerdata: jobSeekerUpdateProps, id: number): Promise<ServicReturnType>
 }
 
 export default class JobSeekerService implements IJobSeekerService{
@@ -30,7 +30,7 @@ export default class JobSeekerService implements IJobSeekerService{
       : { success: false, message: "Profile not found !" }
   }
 
-  async updateProfile(jobSeekerdata: jobSeekerProps, id: number): Promise<ServicReturnType> {
+  async updateProfile(jobSeekerdata: jobSeekerUpdateProps, id: number): Promise<ServicReturnType> {
     const result = await this.repo.update(jobSeekerdata, id)
     return result 
       ? { success: true, payload: result, message: "Profile updated successfully !" }
