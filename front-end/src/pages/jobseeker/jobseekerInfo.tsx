@@ -84,7 +84,10 @@ const JobseekerInfo = () => {
     event.preventDefault();
     dispatch(updateProfile({ profileProps: values, hasProfile, id: jobseeker.id }));
     if(values.img_url) setShowInput(false)
-    setTimeout(() => dispatch(cleanMessages()), 3000);
+    setTimeout(() => {
+      dispatch(cleanMessages())
+      !hasProfile && setShowCVForm(true)
+    }, 2000);
   };
 
   const handleChange = (prop: keyof State) => 

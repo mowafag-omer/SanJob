@@ -2,7 +2,7 @@ import { Entity, Column, PrimaryGeneratedColumn, OneToOne, JoinColumn, ManyToOne
 import { Application } from "../application";
 import { Company } from "../company";
 
-@Entity("jobOfferOffer")
+@Entity("job_offer")
 export default class JobOffer {
   @PrimaryGeneratedColumn()
   id: number;

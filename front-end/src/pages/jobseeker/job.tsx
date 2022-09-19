@@ -17,16 +17,24 @@ import { useDispatch, useSelector } from 'react-redux'
 import { AppDispatch, RootState } from '../../store'
 import { useParams } from 'react-router-dom'
 import { getJobById } from "../../store/jobsSlice";
+import { apply } from '../../store/applicationSlice';
 
 const Job = () => {
   const dispatch: AppDispatch = useDispatch()
   const { id } = useParams() 
-  const { jobById: job } = useSelector((state: RootState) => state.jobs)
-  
+  const { jobs, jobseeker, applications } = useSelector((state: RootState) => state)
+  const { jobById: job } = jobs
+  const applied = !!applications.jobseekerApplications.filter((app: any) => app.jobOffer?.id === job.id).length
+
   useEffect(() => {
     dispatch(getJobById(id))
   // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [])
+  
+  const handleApply = () => {
+    if (jobseeker.id)
+      dispatch(apply({jobOffer: job.id, jobSeeker: jobseeker.id}))
+  }
 
   return (<>
     {job &&
@@ -88,8 +96,14 @@ const Job = () => {
   
           </Box>
         </Container>
-        <Button size="large" variant="contained" sx={style.button}>
-          Apply
+        <Button 
+          size="large" 
+          variant="contained" 
+          sx={style.button}
+          disabled={applied}
+          onClick={handleApply}
+        >
+          {applied ? "Already applied" : "Apply"}
         </Button>
       </Grid>
     }

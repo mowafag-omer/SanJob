@@ -41,6 +41,7 @@ export type ProfileProps = {
   linkedin: string | null
   website: string | null
   github: string | null
+  user: number| null
 }
 
 const initialState: JobseekerState = {
@@ -140,7 +141,7 @@ export const jobseekerSlice = createSlice({
           payload.data.CV = Buffer.from(payload.data.CV, 'base64')
           payload.data.CV = new Blob([new Uint8Array(payload.data.CV).buffer], {type: 'application/pdf'})
         }
-        return {...state, ...payload.data, loading: false} 
+        return {...state, ...payload.data, message: payload.message, loading: false} 
       }
     )
     builder.addCase(
@@ -165,7 +166,7 @@ export const jobseekerSlice = createSlice({
           payload.data.CV = Buffer.from(payload.data.CV, 'base64')
           payload.data.CV = new Blob([new Uint8Array(payload.data.CV).buffer], {type: 'application/pdf'})
         }
-        return {...state, ...payload.data, loading: false} 
+        return {...state, ...payload.data, message: payload.message, loading: false} 
       }
     )
     builder.addCase(

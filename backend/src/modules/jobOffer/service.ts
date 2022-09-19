@@ -1,5 +1,6 @@
 import { IJobOfferRepository } from "./repository";
 import { jobOfferProps } from "./types";
+import filterUserData from "../../helpers/filterUserData";
 
 export interface IJobOfferService {
   repo: IJobOfferRepository
@@ -18,21 +19,23 @@ export default class JobOfferService implements IJobOfferService{
 
   async postJobOffer(jobOfferDetails: jobOfferProps): Promise<any> {
     const result = await this.repo.create(jobOfferDetails)
-    return { success: true, payload: result, message: "The Offer posted successfully !" }
+    return { success: true, payload: result, message: "The offer posted successfully !" }
   }
 
   async getCompayJobOffers(id: number): Promise<any> {
     const result = await this.repo.readCompanyjobOffers(id)
+    filterUserData(result, 'job')
     return result 
       ? { success: true, payload: result }
-      : { success: false, message: "No job Offers had posted yet !" }
+      : { success: false, message: "No job offers have posted yet !" }
   }
 
   async getJobOffers(): Promise<any> {
     const result = await this.repo.readAll()
+    filterUserData(result, 'job')
     return result 
       ? { success: true, payload: result }
-      : { success: false, message: "No jobs Offers had posted yet !" }
+      : { success: false, message: "No jobs offers have posted yet !" }
   }
 
   async updateJobOffer(companyProfile: jobOfferProps, id: number): Promise<any> {

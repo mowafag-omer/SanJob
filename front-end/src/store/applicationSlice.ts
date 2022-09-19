@@ -7,7 +7,7 @@ export type ApplicationState = {
   loading: boolean
   jobApplications: []
   companyApplications: []
-  jobseekerApplications: Object[]
+  jobseekerApplications: any[]
   message: string | null
   error: string | null;
 }

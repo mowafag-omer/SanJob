@@ -10,6 +10,7 @@ import Job from "../pages/jobseeker/job";
 import Companies from "../pages/jobseeker/companies";
 import JobseekerInfo from "../pages/jobseeker/jobseekerInfo";
 import JobseekerDashboard from "../pages/jobseeker/jobseekerDashboard";
+import JobseekerApplications from "../pages/jobseeker/jobseekerApplications";
 import CompanyInfo from "../pages/company/companyInfo";
 import CompanyDashboard from "../pages/company/companyDashboard";
 import PostJob from "../pages/company/postJob";
@@ -31,6 +32,14 @@ const Router = () => {
             element={
               <ProtectedRoute role="jobseeker">
                 <JobseekerDashboard />
+              </ProtectedRoute>
+            }
+          />
+          <Route
+            path="/jobseekerApplications"
+            element={
+              <ProtectedRoute role="jobseeker">
+                <JobseekerApplications />
               </ProtectedRoute>
             }
           />

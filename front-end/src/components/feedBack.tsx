@@ -31,6 +31,7 @@ const style = {
     width: 400,
     bgcolor: 'background.paper',
     borderRadius: 1,
+    border: 0,
     boxShadow: 24,
     p: 4,
   }

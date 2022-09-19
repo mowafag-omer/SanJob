@@ -31,7 +31,7 @@ const pages = [
 const jsettings = [
   {name: 'Profile', path: '/jobseekerInfo'}, 
   {name: 'Dashboard', path: '/JobseekerDashboard'}, 
-  {name: 'My applications', path: '#'}, 
+  {name: 'My applications', path: '/jobseekerApplications'}, 
   {name: 'Account', path: '#'}, 
   {name: 'Logout', path: '#'}
 ];
@@ -44,7 +44,7 @@ const csettings = [
 
 const jPages = [
   {label: 'Dashboard', path: '/JobseekerDashboard'}, 
-  {label: 'My applications', path: '#'}, 
+  {label: 'My applications', path: '/jobseekerApplications'}, 
 ]
 
 const cPages = [
@@ -59,12 +59,19 @@ const Nav = () => {
   // const [showNav, setShowNav] = React.useState(false)
 
 
-  const { isLogged, role } = useSelector((state: RootState) => state.user)
+  const { user, jobseeker, company } = useSelector((state: RootState) => state)
+  const { isLogged, role } = user
   const dispatch: AppDispatch = useDispatch();
   const navigate = useNavigate();
 
   const settings = role === 'jobseeker' ? jsettings : csettings
   const subNavPages = role === 'jobseeker' ? jPages : cPages
+  const avatar_img =
+    role === "jobseeker"
+      ? jobseeker.img_url
+      : role === "company"
+      ? company.logo_url
+      : "/static/images/avatar/2.jpg";      
 
   useEffect(() => {
     !isLogged && navigate('/')
@@ -153,9 +160,9 @@ const Nav = () => {
                   onClose={handleCloseNavMenu}
                   sx={{
                     display: { xs: 'block', md: 'none' },
-                    " & .MuiList-root": {
-                      bgcolor: '#dadada',
-                    }
+                    // " & .MuiList-root": {
+                    //   bgcolor: '#dadada',
+                    // }
                   }}
                 >
                   {pages.map((page) => (
@@ -231,7 +238,7 @@ const Nav = () => {
               <Box sx={{ flexGrow: 0 }}>
                 <Tooltip title="Open settings">
                   <IconButton onClick={handleOpenUserMenu} sx={{ p: 0 }}>
-                    <Avatar alt="Remy Sharp" src="/static/images/avatar/2.jpg" />
+                    <Avatar sx={{border: 2}} alt="Remy Sharp" src={avatar_img as string} />
                   </IconButton>
                 </Tooltip>
                 <Menu

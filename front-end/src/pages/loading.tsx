@@ -6,9 +6,11 @@ import { getJobseekerProfile } from "../store/jobSeekerSlice"
 import { getCompanyProfile } from '../store/companySlice'
 import { Box, LinearProgress } from '@mui/material/';
 import { fetchSectors } from '../store/sectorsSlice'
+import { getJobSeekerApplications } from '../store/applicationSlice'
 
 const Loading = () => {
-  const { id: userId, isLogged, hasProfile, role } = useSelector((state: RootState) => state.user)
+  const { user, jobseeker } = useSelector((state: RootState) => state)
+  const { id: userId, isLogged, hasProfile, role } = user
   const dispatch: AppDispatch = useDispatch()
   const navigate = useNavigate()
 

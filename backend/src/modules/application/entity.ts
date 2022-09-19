@@ -10,8 +10,8 @@ export default class Application {
   @Column({type: "timestamp", nullable: true, default: () => "CURRENT_TIMESTAMP"})
   applying_date: string;
 
-  @Column({nullable: true, default: "sent"})
-  status: string = "sent"
+  @Column({nullable: true, default: "Received"})
+  status: string = "Received"
 
   @ManyToOne(() => JobOffer, (jobOffer) => jobOffer.applications, { nullable: false, eager: true })
   jobOffer: JobOffer

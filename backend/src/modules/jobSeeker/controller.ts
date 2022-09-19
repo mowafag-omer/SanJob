@@ -38,7 +38,7 @@ export default class JobSeekerController implements IJobSeekerController {
       if (!!dtoErrors) throw new ApiError(400, dtoErrors);
       
       const result = await this.service.createProfile(req.body);
-      res.status(201).json({ payload: result.payload, message: result.message });
+      res.status(201).json({ data: result.payload, message: result.message });
     } catch (error) {
       next(error);
     }

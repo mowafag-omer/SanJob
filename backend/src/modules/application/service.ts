@@ -25,7 +25,7 @@ export default class ApplicationService implements IApplicationService{
 
   async getJobseekerApp(id: number): Promise<any> {
     const result = await this.repo.readJobseekerApp(id)
-    filterUserData(result)
+    filterUserData(result, 'application')
     return result 
       ? { success: true, payload: result }
       : { success: false, message: "No applications has found !" }
@@ -33,7 +33,7 @@ export default class ApplicationService implements IApplicationService{
 
   async getJobApp(id: number): Promise<any> {
     const result = await this.repo.readJobApp(id)
-    filterUserData(result)
+    filterUserData(result, 'application')
     return result 
       ? { success: true, payload: result }
       : { success: false, message: "No applications has found !" }
@@ -41,7 +41,7 @@ export default class ApplicationService implements IApplicationService{
 
   async getCompanyJobsApp(id: number): Promise<any> {
     const result = await this.repo.readCompanyJobsApp(id)
-    filterUserData(result)
+    filterUserData(result, 'application')
     return result 
       ? { success: true, payload: result }
       : { success: false, message: "No applications has found !" }

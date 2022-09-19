@@ -41,6 +41,10 @@ type State = {
 }
 
 const Register = () => {
+  const dispatch: AppDispatch = useDispatch()
+  const { isLogged, message, error, validationError } = useSelector((state: RootState) => state.user)
+  const navigate = useNavigate()
+
   const [values, setValues] = useState<State>({
     email: "",
     password: "",
@@ -52,9 +56,6 @@ const Register = () => {
     roleError: false
   })
 
-  const dispatch: AppDispatch = useDispatch()
-  const { isLogged, message, error, validationError } = useSelector((state: RootState) => state.user)
-  const navigate = useNavigate()
 
   useEffect(() => {
     dispatch(cleanErrors())
@@ -69,8 +70,10 @@ const Register = () => {
       setTimeout(() => { return navigate('/') }, 2000)
     } 
 
+    if (validationError?.field === 'role')
+      setValues({...values, roleError: true})
   // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [dispatch, isLogged, navigate])
+  }, [dispatch, isLogged, validationError, navigate])
   
   const handleSubmit = (event: React.ChangeEvent<HTMLFormElement>) => {
     event.preventDefault()
@@ -82,7 +85,7 @@ const Register = () => {
       password: values.password, 
       role: values.role
     }))
-    setValues({...values, password: "", confirmPassword: ""})
+    setValues({...values, password: "", confirmPassword: "", roleError: false})
   }
 
   const handleChange = (prop: keyof State) => (event: React.ChangeEvent<HTMLInputElement>) => {
@@ -144,7 +147,11 @@ const Register = () => {
             sx={style.radioGroup}
           >
             <Box 
-              sx={[style.radioBox, () => values.roleError ? style.roleErorr : {}]}
+              sx={[
+                style.radioBox, 
+                () => values.roleError ? style.roleErorr : {},
+                () => values.role === 'jobseeker' ? {border: 1} : {}
+              ]}
               onClick={() => setValues({...values, role: 'jobseeker', roleError: false})}
             >
               <Radio 
@@ -157,7 +164,11 @@ const Register = () => {
               </Typography>
             </Box>
             <Box 
-              sx={[style.radioBox, () => values.roleError ? style.roleErorr : {}]}
+              sx={[
+                style.radioBox, 
+                () => values.roleError ? style.roleErorr : {},
+                () => values.role === 'company' ? {border: 1} : {}
+              ]}
               onClick={() => setValues({...values, role: 'company', roleError: false})}
             >
               <Radio 
@@ -170,7 +181,7 @@ const Register = () => {
               </Typography>
             </Box>
           </RadioGroup>
-          {values.roleError && <FormHelperText>Role is required</FormHelperText>}
+          {(values.roleError || validationError?.field ==='role') && <FormHelperText>Role is required</FormHelperText>}
         </FormControl>
 
         <FormControl sx={{ m: 1, width: "35ch" }} variant="outlined">
@@ -182,7 +193,7 @@ const Register = () => {
             label="Email"
             size="small"
             error={validationError?.field === 'email'}
-            helperText={validationError?.message} 
+            helperText={validationError?.field === 'email'? validationError?.message : ''} 
             required
           />
         </FormControl>

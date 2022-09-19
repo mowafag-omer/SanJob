@@ -5,6 +5,7 @@ import companyReducer from './companySlice'
 import sectorsReducer from './sectorsSlice'
 import companiesReducer from './companiesSlice'
 import jobsReducer from './jobsSlice'
+import applicationsReducer from './applicationSlice'
 
 const store = configureStore({
   reducer: {
@@ -13,7 +14,8 @@ const store = configureStore({
     company: companyReducer,
     sectors: sectorsReducer,
     companies: companiesReducer,
-    jobs: jobsReducer
+    jobs: jobsReducer,
+    applications: applicationsReducer
   },
 })
 export type RootState = ReturnType<typeof store.getState>

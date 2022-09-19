@@ -4,6 +4,7 @@ import { AppDispatch, RootState } from '../../store'
 import { fetchJobs } from '../../store/jobsSlice'
 import JobsContainer from "../../components/jobseeker/jobs/jobsContainer"
 import SearchFrom from "../../components/jobseeker/jobs/searchFrom"
+import { getJobSeekerApplications } from '../../store/applicationSlice'
 
 const data = [
   {
@@ -43,9 +44,11 @@ const data = [
 const Jobs = () => {
   const dispatch: AppDispatch = useDispatch()
   const jobs = useSelector((state: RootState) => state.jobs.jobs)
+  const jobseeker = useSelector((state: RootState) => state.jobseeker)
 
   useEffect(() => {
     dispatch(fetchJobs())
+    jobseeker.id && dispatch(getJobSeekerApplications(jobseeker.id))
   // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [])
 

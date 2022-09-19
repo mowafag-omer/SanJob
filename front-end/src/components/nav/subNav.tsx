@@ -7,24 +7,25 @@ type Props = {
 }
 
 const SubNav = ({ links }: Props) => {
+  const [value, setValue] = React.useState(0)
   const location = useLocation()
   const current = location.pathname
 
   return (
     <Toolbar variant="dense">
       <Tabs
+        value={value}
         variant="scrollable"
         scrollButtons
         allowScrollButtonsMobile
       >
-        {links.map(({ label, path }: {label:string, path: string}) => 
+        {links.map(({ label, path }: {label:string, path: string}, index) => 
           <Tab 
             key={path+'key'} 
-            value={null}
             label={label} 
             to={path} 
             component={Link} 
-            sx={[style.tab, ()=> (current === path) ? style.active : {}]}
+            onClick={() => setValue(index)}
           />
         )}
       </Tabs>
@@ -33,13 +34,3 @@ const SubNav = ({ links }: Props) => {
 }
 
 export default SubNav
-
-const style = {
-  tab: {
-    color: '#2b3247',
-  },
-  active: {
-    borderBottom: 3,
-    borderColor: '#2b3247'
-  }
-}
