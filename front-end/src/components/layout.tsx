@@ -1,4 +1,5 @@
 import { Grid } from "@mui/material"
+import Footer from "./footer"
 import Nav from "./nav/nav"
 
 type LayoutProps = {
@@ -9,11 +10,13 @@ const Layout = ({ children }: LayoutProps ) => {
   return (
     <Grid sx={{
       display: "flex",
-      flexDirection: "column",  
+      flexDirection: "column",
+      justifyContent: "space-between", 
       height: '100vh' 
     }}>
       <Nav />
       {children}
+      <Footer />
     </Grid>
   )
 }

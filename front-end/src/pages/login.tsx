@@ -34,9 +34,8 @@ const Login = () => {
     password: "",
     showPassword: false,
   })
-  
-  const dispatch: AppDispatch = useDispatch()
   const { isLogged, error } = useSelector((state: RootState) => state.user)
+  const dispatch: AppDispatch = useDispatch()
   const navigate = useNavigate()
 
   useEffect(() => {
@@ -85,6 +84,7 @@ const Login = () => {
       direction="row"
       justifyContent="center"
       alignItems="center"
+      sx={{pb: 3}}
     >
       <Box
         component="form"

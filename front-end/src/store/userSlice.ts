@@ -4,6 +4,7 @@ import api from "../utils/api";
 import decodeToken from "../utils/decodeToken";
 import { updateProfile } from "./jobSeekerSlice";
 import { updateCompanyProfile } from "./companySlice";
+import { SignalWifiOffOutlined } from "@mui/icons-material";
 
 export type UserState = {
   token: string | null;
@@ -24,10 +25,6 @@ export type registerProps = {
   role: string;
 };
 
-export type loginProps = {
-  email: string;
-  password: string;
-};
 
 const initialState: UserState = {
   token: null,
@@ -46,12 +43,17 @@ export const register = createAsyncThunk(
   "user/register",
   async (props: registerProps, { rejectWithValue }) => {
     return await api
-      .post("/user/register", props)
-      .then((response: { data: any }) => response.data)
-      .catch((error) => rejectWithValue(error.response.data));
+    .post("/user/register", props)
+    .then((response: { data: any }) => response.data)
+    .catch((error) => rejectWithValue(error.response.data));
   }
-);
+  );
 
+export type loginProps = {
+  email: string;
+  password: string;
+};
+  
 export const login = createAsyncThunk(
   "user/login",
   async (props: loginProps, { rejectWithValue }) => {
@@ -59,6 +61,16 @@ export const login = createAsyncThunk(
       .post("/user/login", props)
       .then((response: { data: any }) => response.data)
       .catch((error) => rejectWithValue(error.response.data));
+  }
+);
+
+export const logout = createAsyncThunk(
+  "user/logout",
+  async () => {
+    return await api
+    .get('/user/logout')
+    .then((response: { data: any }) => response.data)
+    .catch((error) => error.response.data);
   }
 );
 
@@ -70,7 +82,21 @@ export const userSlice = createSlice({
       state.error = null;
       state.validationError = null;
     },
-    logout: () => initialState,
+    refresh: (state, { payload }) => {
+      const { email, hasProfile, id, role } = decodeToken(payload.token);
+      
+      return {
+        ...state,
+        token: payload.token,
+        id,
+        email,
+        hasProfile,
+        role,
+        message: payload.message,
+        isLogged: true,
+        loading: false,
+      };
+    },
   },
   extraReducers: (builder) => {
     builder.addCase(register.pending, (state) => {
@@ -78,7 +104,6 @@ export const userSlice = createSlice({
     });
     builder.addCase(register.fulfilled, (state, { payload }: PayloadAction<any>) => {
       const { email, hasProfile, id, role } = decodeToken(payload.token);
-      console.log(decodeToken(payload.token));
       
       return {
         ...state,
@@ -127,6 +152,9 @@ export const userSlice = createSlice({
         state.validationError = action.payload;
       }
     });
+
+    builder.addCase(logout.fulfilled, () => initialState);
+
     builder.addCase(updateProfile.fulfilled, (state) => {
       state.hasProfile = true;
     });
@@ -137,4 +165,4 @@ export const userSlice = createSlice({
 });
 
 export default userSlice.reducer;
-export const { cleanErrors, logout } = userSlice.actions;
+export const { cleanErrors, refresh } = userSlice.actions;

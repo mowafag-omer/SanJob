@@ -1,23 +1,23 @@
-import React from 'react'
-import {
-  Button,
-} from "@mui/material";
-import { Link } from 'react-router-dom'
+import React, { useEffect } from 'react'
+import { useDispatch, useSelector } from "react-redux";
+import { RootState, AppDispatch } from "../../store";
+import { getCompanyJobs } from '../../store/jobsSlice';
+import { getCompanyApplications } from '../../store/applicationSlice';
+
 
 const CompanyDashboard = () => {
+  const { id } = useSelector((state: RootState) => state.company);
+  const dispatch: AppDispatch = useDispatch();
+
+  useEffect(() => {
+    dispatch(getCompanyJobs(id))
+    dispatch(getCompanyApplications(id))
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [])
+
   return (
     <>
     <div>CompanyDashboard</div>
-    <Button
-      variant='contained'
-      component={Link}
-      to='/postJob'
-      size='small'
-      color='inherit'
-      style={{ background: '#ffc107' }}
-    >
-      Company
-    </Button>
     </>
   )
 }

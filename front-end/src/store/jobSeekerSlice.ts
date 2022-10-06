@@ -1,6 +1,6 @@
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit"
 import type { PayloadAction } from "@reduxjs/toolkit"
-import api from "../utils/api"
+import api, { addAuth } from "../utils/api"
 import { logout } from "./userSlice"
 import { Buffer } from 'buffer'
 
@@ -74,9 +74,12 @@ export const updateProfile = createAsyncThunk(
       hasProfile,
       id,
     }: { profileProps: ProfileProps, hasProfile: boolean, id: number | null},
-    { rejectWithValue }
+    { rejectWithValue, getState }
   ) => {
     if(!hasProfile) profileProps.CV = null
+    const state: any = getState()
+    const token = state.user.token
+    addAuth(token)
     return await api
       .post(
         `/jobseeker/${hasProfile ? "updateJobSeekerProfile/"+id : "createProfile"}`,
@@ -91,8 +94,12 @@ export const addCV = createAsyncThunk(
   "jobseeker/addCV",
   async (
     { cv, id }: { cv: any, id: number | null },
-    { rejectWithValue }
+    { rejectWithValue, getState }
   ) => {
+    const state: any = getState()
+    const token = state.user.token
+    addAuth(token)
+
     const formData = new FormData()
     formData.append("CV", cv)
     const data = cv == null ? {CV: null} : formData 
@@ -108,7 +115,10 @@ export const addCV = createAsyncThunk(
 
 export const getJobseekerProfile = createAsyncThunk(
   "jobseeker/getJobseekerProfile", 
-  async(userId: number | null, { rejectWithValue }) => {
+  async(userId: number | null, { rejectWithValue, getState }) => {
+    const state: any = getState()
+    const token = state.user.token
+    addAuth(token)
     return await api
       .get(`/jobseeker/getJobSeekerProfile/${userId}`)
       .then((response: { data: any }) => response.data)
@@ -135,8 +145,6 @@ export const jobseekerSlice = createSlice({
     builder.addCase(
       updateProfile.fulfilled,
       (state, { payload }: PayloadAction<any>) => {
-        console.log("update_porfile_slice", payload.data);
-        
         if (payload.data.CV) {
           payload.data.CV = Buffer.from(payload.data.CV, 'base64')
           payload.data.CV = new Blob([new Uint8Array(payload.data.CV).buffer], {type: 'application/pdf'})
@@ -198,7 +206,7 @@ export const jobseekerSlice = createSlice({
       }
     )
 
-    builder.addCase(logout, () => initialState)
+    builder.addCase(logout.fulfilled, () => initialState)
   },
 })
 

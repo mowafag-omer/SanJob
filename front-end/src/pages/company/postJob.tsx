@@ -34,9 +34,7 @@ const PostJob = () => {
     description: null,
     requirement: null,
     start_date: null,
-    posted_at: "",
     hiring_process: null,
-    status: null,
     company: company.id,
   })
 
@@ -48,7 +46,7 @@ const PostJob = () => {
     dispatch(postJob({ jobProps: values, id: values.id }));
     setTimeout(() => {
       dispatch(cleanMessages())
-      navigate('/companyDashboard')
+      navigate('/companyJobs')
     }, 3000);
   }
 
@@ -108,8 +106,12 @@ const PostJob = () => {
             onChange={handleChange("contract_type")}
             sx={{ width: 223 }}
           >
-            <MenuItem value="CDI">CDI</MenuItem>
-            <MenuItem value="CDD">CDD</MenuItem>
+            <MenuItem value="permanent">permanent</MenuItem>
+            <MenuItem value="Full time">Full time</MenuItem>
+            <MenuItem value="Part time">Part time</MenuItem>
+            <MenuItem value="Temporary">Temporary</MenuItem>
+            <MenuItem value="Apprenticeship">Apprenticeship</MenuItem>
+            <MenuItem value="Internship">Internship</MenuItem>
           </Select>
         </FormControl>
 

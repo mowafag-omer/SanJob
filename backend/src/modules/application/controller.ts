@@ -68,7 +68,7 @@ export default class ApplicationController implements IApplicationController {
       const id: number = +req.params.id
       const result = await this.service.updateApplication(req.body, id)
       result.success
-        ? res.status(200).json({ payload: result.payload, message: result.message })
+        ? res.status(200).json({ data: result.payload, message: result.message })
         : res.status(204).json()
     } catch (error) {
       next(error)

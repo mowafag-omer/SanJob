@@ -43,14 +43,14 @@ const csettings = [
 ];
 
 const jPages = [
-  {label: 'Dashboard', path: '/JobseekerDashboard'}, 
+  {label: 'Dashboard', path: '/jobseekerDashboard'}, 
   {label: 'My applications', path: '/jobseekerApplications'}, 
 ]
 
 const cPages = [
   {label: 'Dashboard', path: '/companyDashboard'}, 
-  {label: 'Jobs', path: '#'}, 
-  {label: 'Applications', path: '#'}, 
+  {label: 'Job offers', path: '/companyJobs'}, 
+  {label: 'Applications', path: '/companyApplications'}, 
 ]
 
 const Nav = () => {
@@ -118,7 +118,7 @@ const Nav = () => {
               variant="h4"
               noWrap
               component={Link}
-              to="/homePage"
+              to={role === 'company' ? '/companyDashboard' : '/homePage'}
               sx={{
                 mr: 2,
                 display: { xs: 'none', md: 'flex' },
@@ -179,7 +179,7 @@ const Nav = () => {
               variant="h4"
               noWrap
               component={Link}
-              to="/homePage"
+              to={role === 'company' ? '/companyDashboard' : '/homePage'}
               sx={{
                 mr: 2,
                 display: { xs: 'flex', md: 'none' },
@@ -224,7 +224,7 @@ const Nav = () => {
               <Button
                 startIcon={<LoginIcon />}
                 component={Link}
-                to='/login'
+                to={'/login'}
                 variant='outlined'
                 size='small'
                 color='inherit'

@@ -129,7 +129,7 @@ export const companySlice = createSlice({
         state.error = payload
       }
     );
-    builder.addCase(logout, () => initialState)
+    builder.addCase(logout.fulfilled, () => initialState)
   },
 })
 

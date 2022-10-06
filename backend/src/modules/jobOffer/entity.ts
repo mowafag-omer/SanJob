@@ -28,7 +28,7 @@ export default class JobOffer {
   @Column()
   start_date: Date
   
-  @Column({type: "timestamp", nullable: true, default: () => "CURRENT_TIMESTAMP"})
+  @Column({type: "timestamp", default: () => "CURRENT_TIMESTAMP"})
   posted_at: string
 
   @Column("text", { nullable: true })

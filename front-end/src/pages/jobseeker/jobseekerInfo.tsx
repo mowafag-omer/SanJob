@@ -49,7 +49,7 @@ const defaultImg = "https://upload.wikimedia.org/wikipedia/en/thumb/b/b1/Portrai
 
 const JobseekerInfo = () => {
   const { user, jobseeker, sectors } = useSelector((state: RootState) => state);
-  const { id: userId, email: userEmail, role, hasProfile } = user
+  const { token, id: userId, email: userEmail, role, hasProfile } = user
   const { message, CV } = jobseeker
 
   const [values, setValues] = useState<State>({

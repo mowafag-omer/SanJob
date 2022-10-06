@@ -1,5 +1,5 @@
 import { createSlice } from "@reduxjs/toolkit";
-import api from "../utils/api";
+import axios from "axios";
 import getSectorsNames from "../utils/getSectorsNames";
 
 export type Sectors = {
@@ -40,7 +40,7 @@ export function fetchSectors() {
   return async (dispatch: (arg0: { payload: any; type: string; }) => void) => {
     dispatch(getSectors())
     try {
-      const response = await api.get('https://api.trademe.co.nz/v1/Categories/Jobs.json')
+      const response = await axios.get('https://api.trademe.co.nz/v1/Categories/Jobs.json')
       dispatch(getSectorsSuccess(getSectorsNames(response.data)))
     } catch (error) {
       dispatch(getSectorsFailure())

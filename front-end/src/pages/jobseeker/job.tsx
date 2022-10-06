@@ -12,7 +12,7 @@ import {
 import HandshakeIcon from '@mui/icons-material/Handshake';
 import LocationOnIcon from '@mui/icons-material/LocationOn';
 import TodayIcon from '@mui/icons-material/Today';
-import JobNav from "../../components/jobseeker/job/jobNav";
+import JobNav from "../../components/nav/jobNav";
 import { useDispatch, useSelector } from 'react-redux'
 import { AppDispatch, RootState } from '../../store'
 import { useParams } from 'react-router-dom'
@@ -32,8 +32,11 @@ const Job = () => {
   }, [])
   
   const handleApply = () => {
-    if (jobseeker.id)
+    if (jobseeker.id) {
       dispatch(apply({jobOffer: job.id, jobSeeker: jobseeker.id}))
+    } else {
+      alert('Sign up to be able to apply for this offer')
+    }
   }
 
   return (<>

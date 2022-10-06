@@ -1,9 +1,10 @@
-import React, { Fragment, useState } from "react"
+import React, { useState, useEffect } from "react"
 import { Grid, Container } from "@mui/material"
-import { useSelector } from 'react-redux'
-import { RootState } from '../../store'
+import { useSelector, useDispatch } from 'react-redux'
+import { RootState, AppDispatch } from '../../store'
 import JobseekerApplicationsCard from "../../components/jobseeker/jobseekerApplications/jobseekerApplicationsCard"
 import JobseekerApplication from "../../components/jobseeker/jobseekerApplications/jobseekerApplication"
+import { getJobSeekerApplications } from "../../store/applicationSlice"
 
 export type ApplicationProps ={
   id: number,
@@ -22,7 +23,13 @@ export type ApplicationProps ={
 
 const JobseekerApplications = () => {
   const applications = useSelector((state: RootState) => state.applications.jobseekerApplications)
+  const jobseeker = useSelector((state: RootState) => state.jobseeker)
   const [open, setOpen] = useState(false);
+  const dispatch: AppDispatch = useDispatch()
+
+  useEffect(() => {
+    dispatch(getJobSeekerApplications(jobseeker.id))
+  }, [])
 
   const handleClickOpen = () => {
     setOpen(true);
@@ -39,6 +46,7 @@ const JobseekerApplications = () => {
             <JobseekerApplicationsCard  application={application} />
           </div>
           <JobseekerApplication 
+            application={application}
             open={open}
             handleClickOpen={handleClickOpen}
             handleClose={handleClose}
@@ -53,7 +61,7 @@ export default JobseekerApplications
 
 const styles = {
   gird : {
-    height: "100%",
+    // height: "100%",
     width: '100%',
     p: '3ch'
   },
@@ -62,7 +70,11 @@ const styles = {
     display: 'flex',
     flexDirection: 'column',
     // flexWrap: {xs: 'wrap', md: 'nowrap'},
-    gap: '5ch',
+    gap: 2,
     alignItems: 'center',
   },
 }
+function dispatch(arg0: any) {
+  throw new Error("Function not implemented.")
+}
+

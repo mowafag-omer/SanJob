@@ -23,9 +23,9 @@ export type JobProps = {
   description: string | null
   requirement: string | null
   start_date: Date | null
-  posted_at: string
+  posted_at?: string
   hiring_process: string | null
-  status: string | null
+  status?: string | null
   company: number | null
 }
 
@@ -44,8 +44,6 @@ export const postJob = createAsyncThunk(
   async ({ jobProps, id }: { jobProps: JobProps; id: number | null},
     { rejectWithValue }
   ) => {
-    console.log(jobProps);
-    
     return await api
       .post(
         `/jobOffer/${id ? "updateJobOffer/"+id : "postJobOffer"}`,
@@ -99,6 +97,7 @@ export const jobsSlie = createSlice({
     builder.addCase(
       postJob.fulfilled,
       (state, { payload }: PayloadAction<any>) => {
+        // const newJobs: [] = [...state.companyJobs, payload.payload]
         return {...state, message: payload.message, loading: false}
       }
     )
@@ -131,7 +130,24 @@ export const jobsSlie = createSlice({
       }
     )
 
-    builder.addCase(logout, (state) =>{
+    builder.addCase(getCompanyJobs.pending, (state) => {
+      state.loading = true;
+    })
+    builder.addCase(
+      getCompanyJobs.fulfilled,
+      (state, { payload }: PayloadAction<any>) => {
+        return {...state, companyJobs: payload, loading: false}
+      }
+    )
+    builder.addCase(
+      getCompanyJobs.rejected, 
+      (state, action: PayloadAction<any>) => {
+        state.loading = false;
+        state.error = action.payload;
+      }
+    )
+
+    builder.addCase(logout.fulfilled, (state) =>{
       return {...state, companyJobs: []}
     })
   }

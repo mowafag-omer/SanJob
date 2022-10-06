@@ -22,7 +22,7 @@ const middlewares = {
   cookie: cookieParser(),
   cors: cors({
     origin:'http://localhost:3000', 
-    credentials:true, 
+    credentials: true, 
     exposedHeaders: 'Authorization'
   }),
   fileUpload: fileUpload({

@@ -1,4 +1,4 @@
-import { MinLength, MaxLength, IsString, IsDefined, IsEmail, IsIn } from 'class-validator'
+import { MinLength, MaxLength, IsString, IsDefined, Matches, IsEmail, IsIn } from 'class-validator'
 import { AbstractDto } from '../../helpers/abstractDto'
 
 interface IRequestCreateUserDto {
@@ -17,6 +17,7 @@ export class RequestCreateUserDto extends AbstractDto implements IRequestCreateU
   @IsString()
   @MinLength(4, { message: 'password is too short'})
   @MaxLength(30, { message: 'password is too long' })
+  @Matches(/((?=.*\d)|(?=.*\W+))(?![.\n])(?=.*[A-Z])(?=.*[a-z]).*$/, {message: 'password too weak'})
   public password: string
 
   @IsDefined({ message: 'Role is required !'})

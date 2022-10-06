@@ -1,7 +1,7 @@
 import { getEntityRepository } from "../../helpers/getentityRepository";
 import { EntityTarget, Repository } from "typeorm";
 import Applicaton from "./entity";
-import { applicationProps } from "./types";
+import { applicationProps, updateApplicationProps } from "./types";
 
 export interface IApplicatonRepository {
   entity: EntityTarget<Applicaton>
@@ -10,7 +10,7 @@ export interface IApplicatonRepository {
   readJobseekerApp(id: number): Promise<any>
   readJobApp(id: number): Promise<any>
   readCompanyJobsApp(id: number): Promise<any>
-  update(applicatonDetails: applicationProps, id: number): Promise<applicationProps | false>
+  update(applicatonDetails: updateApplicationProps, id: number): Promise<updateApplicationProps | false>
 }
 
 export default class ApplicatonRepository implements IApplicatonRepository{
@@ -43,7 +43,7 @@ export default class ApplicatonRepository implements IApplicatonRepository{
   }
 
 
-  async update(applicatonDetails: applicationProps, id: number): Promise<applicationProps | false> {
+  async update(applicatonDetails: updateApplicationProps, id: number): Promise<updateApplicationProps | false> {
     const repo = this.repo(this.entity)
     const result = await repo.save({id: id, ...applicatonDetails})
 

@@ -61,16 +61,17 @@ export default class JobSeekerController implements IJobSeekerController {
       const id: number = +req.params.id
       let result
 
-      if (req.files != null && typeof req.files?.CV !== 'undefined') {
+      if (req.files != null && typeof req.files?.CV !== 'undefined') {        
         const file = req.files.CV
         if (isSingleFile(file)) {
           file.data.toString("base64")
           result = await this.service.updateProfile({ CV: file.data }, id)
         }
       } else {
+        req.body.CV = null
         result = await this.service.updateProfile(req.body, id)
       }
-      
+            
       result?.success
         ? res.status(200).json({ data: result.payload, message: result.message })
         : res.status(204).json()

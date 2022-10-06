@@ -3,11 +3,13 @@ import jwt from "jsonwebtoken";
 import { IUserRepo } from "./repository";
 import { ServicReturnType, userProps } from "./types";
 import config from "../../config/constants";
+import { generateAccessToken, generateRefreshToken } from "../../helpers/jwt";
 
 export interface IUserService {
   userRepo: IUserRepo;
   registerUser(props: userProps): Promise<ServicReturnType>;
   login(props: userProps): Promise<any>;
+  getUser(email: string): Promise<any>;
 }
 
 export default class UserService implements IUserService {
@@ -20,37 +22,28 @@ export default class UserService implements IUserService {
   async registerUser(props: userProps): Promise<ServicReturnType> {
     const { email, password, role } = props;
     const userExists = await this.userRepo.exists(email, role);
-    if (userExists)
-      return { success: false, message: "User already exist !" };
+    if (userExists) return { success: false, message: "User already exist !" };
 
     const hashedPass = await bcrypt.hash(password, 10);
     props.password = hashedPass;
-    props.email = email.toLowerCase()
+    props.email = email.toLowerCase();
 
     const user = await this.userRepo.create(props);
 
     const result = {
-      id: user.id, 
-      email: user.email, 
-      role: user.role, 
-      hasProfile: user.hasProfile
-    }
-    const access_token = jwt.sign(
-      result,
-      config.JWT_SECRET,
-      { expiresIn: "2h" }
-    );
+      id: user.id,
+      email: user.email,
+      role: user.role,
+      hasProfile: user.hasProfile,
+    };
+    const access_token = generateAccessToken(result);
 
-    const refresh_token = jwt.sign(
-      { id: user.id }, 
-      config.JWT_SECRET, 
-      { expiresIn: "24h" }
-    );
+    const refresh_token = generateRefreshToken(user.email);
 
-    return { 
-      success: true, 
-      message: "User registered successfully !", 
-      payload: { access_token, refresh_token } 
+    return {
+      success: true,
+      message: "User registered successfully !",
+      payload: { access_token, refresh_token },
     };
   }
 
@@ -63,18 +56,29 @@ export default class UserService implements IUserService {
     if (!checkPass)
       return { success: false, message: "incorrect email or password" };
 
-    const access_token = jwt.sign(
-      { id: user.id, email: user.email, role: user.role, hasProfile: user.hasProfile },
-      config.JWT_SECRET,
-      { expiresIn: "2h" }
-    );
+    const access_token = generateAccessToken({
+      id: user.id,
+      email: user.email,
+      role: user.role,
+      hasProfile: user.hasProfile,
+    });
 
-    const refresh_token = jwt.sign(
-      { id: user.id }, 
-      config.JWT_SECRET, 
-      { expiresIn: "24h" }
-    );
+    const refresh_token = generateRefreshToken(user.email);
 
-    return { success: true, payload: { access_token, refresh_token }, message:''};
+    return {
+      success: true,
+      payload: { access_token, refresh_token },
+      message: "",
+    };
+  }
+
+  async getUser(email: any): Promise<any> {
+    const result = await this.userRepo.getUserByEmail(email as string);
+
+    if (result) {
+      return { sucess: true, payload: result };
+    } else {
+      return { sucess: false };
+    }
   }
 }

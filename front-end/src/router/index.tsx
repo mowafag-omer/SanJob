@@ -1,4 +1,4 @@
-import { BrowserRouter, Routes, Route } from "react-router-dom";
+import { Routes, Route } from "react-router-dom";
 import ProtectedRoute from "./PrivateRoute";
 import Layout from "../components/layout";
 import HomePage from "../pages/homePage";
@@ -14,10 +14,12 @@ import JobseekerApplications from "../pages/jobseeker/jobseekerApplications";
 import CompanyInfo from "../pages/company/companyInfo";
 import CompanyDashboard from "../pages/company/companyDashboard";
 import PostJob from "../pages/company/postJob";
+import CompanyJobs from "../pages/company/companyJobs";
+import CompanyJob from "../pages/company/companyJob";
+import CompnyApplicaions from "../pages/company/compnyApplicaions";
 
 const Router = () => {
   return (
-    <BrowserRouter>
       <Layout>
         <Routes>
           <Route path="/" element={<Loading />} />
@@ -28,7 +30,7 @@ const Router = () => {
           <Route path="/job/:id" element={<Job />} />
           <Route path="/companies" element={<Companies />} />
           <Route
-            path="/JobseekerDashboard"
+            path="/jobseekerDashboard"
             element={
               <ProtectedRoute role="jobseeker">
                 <JobseekerDashboard />
@@ -54,6 +56,30 @@ const Router = () => {
             }
           />
           <Route
+            path="/companyJobs"
+            element={
+              <ProtectedRoute role="company">
+                <CompanyJobs />
+              </ProtectedRoute>
+            }
+          />
+          <Route
+            path="/companyJob/:id"
+            element={
+              <ProtectedRoute role="company">
+                <CompanyJob />
+              </ProtectedRoute>
+            }
+          />
+          <Route
+            path="/companyApplications"
+            element={
+              <ProtectedRoute role="company">
+                <CompnyApplicaions />
+              </ProtectedRoute>
+            }
+          />
+          <Route
             path="/postJob"
             element={
               <ProtectedRoute role="company">
@@ -63,7 +89,6 @@ const Router = () => {
           />
         </Routes>
       </Layout>
-    </BrowserRouter>
   );
 };
 

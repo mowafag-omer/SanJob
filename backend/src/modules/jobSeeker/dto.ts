@@ -35,7 +35,6 @@ export class RequestCreateProfileDto extends AbstractDto implements IRequestCrea
 
   public phone: string | null
 
-  // @IsDateString()
   public birthdate: Date | null
 
   public location: string | null;

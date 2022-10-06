@@ -32,14 +32,8 @@ export default class JobSeekerRepository implements IJobSeekerRepository {
 
   async update(jobSeekerProfile: jobSeekerUpdateProps, id: number): Promise<jobSeekerProps | false> {
     const repo = this.jobSeekerRepo(this.jobSeekerEntity);
-    console.log("///////////jobSeekerProfile///////////////////////");
-    console.log(jobSeekerProfile);
-
     await repo.save({id: id, ...jobSeekerProfile})
-    const result = await repo.findOne({where: {id}})
-    
-    console.log("//////////////////////////////////");
-    console.log(result);
+    const result = await repo.findOne({where: {id}})    
     return result ? result : false
   }
 }

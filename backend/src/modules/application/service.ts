@@ -1,5 +1,5 @@
 import { IApplicatonRepository } from "./repository";
-import { applicationProps } from "./types";
+import { applicationProps, updateApplicationProps } from "./types";
 import filterUserData from "../../helpers/filterUserData";
 
 export interface IApplicationService {
@@ -8,7 +8,7 @@ export interface IApplicationService {
   getJobseekerApp(id: number): Promise<any>
   getJobApp(id: number): Promise<any>
   getCompanyJobsApp(id: number): Promise<any>
-  updateApplication(application: applicationProps, id: number): Promise<any>
+  updateApplication(application: updateApplicationProps, id: number): Promise<any>
 }
 
 export default class ApplicationService implements IApplicationService{
@@ -47,7 +47,7 @@ export default class ApplicationService implements IApplicationService{
       : { success: false, message: "No applications has found !" }
   }
 
-  async updateApplication(Application: applicationProps, id: number): Promise<any> {
+  async updateApplication(Application: updateApplicationProps, id: number): Promise<any> {
     const result = await this.repo.update(Application, id)
     return result 
       ? { success: true, payload: result, message: "Application updated successfully !" }

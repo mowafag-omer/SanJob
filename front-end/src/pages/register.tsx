@@ -207,6 +207,9 @@ const Register = () => {
             type={values.showPassword ? "text" : "password"}
             value={values.password}
             onChange={handleChange("password")}
+            inputProps={{
+              pattern: "^(?=.*[0-9])(?=.*[a-z])(?=.*[A-Z]).{8,}$"
+            }}
             endAdornment={
               <InputAdornment position="end">
                 <IconButton
@@ -221,6 +224,11 @@ const Register = () => {
             }
             label="Password"
           />
+          {
+            <FormHelperText id="confirmPassword">
+              Minimum 8 characters atleast 1 Alphabet and 1 Number.
+            </FormHelperText>
+          }
         </FormControl>
 
         <FormControl error={!values.passwordMatch} sx={{ m: 1, width: "35ch" }} size="small" required>

@@ -6,7 +6,7 @@ import { logout } from "./userSlice";
 export type ApplicationState = {
   loading: boolean
   jobApplications: []
-  companyApplications: []
+  companyApplications: any[]
   jobseekerApplications: any[]
   message: string | null
   error: string | null;
@@ -14,6 +14,7 @@ export type ApplicationState = {
 
 export type applicationProps = {
   id?: number
+  status?: string
   jobOffer: number
   jobSeeker: number
 }
@@ -38,10 +39,30 @@ export const apply = createAsyncThunk(
 )
 
 export const getJobSeekerApplications = createAsyncThunk(
-  "jobs/getCompanyJobs", 
+  "jobs/getJobSeekerApplications", 
   async(jobSeekerId: number | null, { rejectWithValue }) => {
     return await api
       .get(`/application/getJobSeekerApplications/${jobSeekerId}`)
+      .then((response: { data: any }) => response.data)
+      .catch((error) => rejectWithValue(error.response.data));
+  }
+)
+
+export const getCompanyApplications = createAsyncThunk(
+  "jobs/getCompanyApplications", 
+  async(companyId: number | null, { rejectWithValue }) => {
+    return await api
+      .get(`/application/getCompanyApplications/${companyId}`)
+      .then((response: { data: any }) => response.data)
+      .catch((error) => rejectWithValue(error.response.data));
+  }
+)
+
+export const updateApplication = createAsyncThunk(
+  "jobs/updateApplication", 
+  async({applicaionId, status}: {applicaionId: number, status: string}, { rejectWithValue }) => {
+    return await api
+      .post(`/application/updateApplication/${applicaionId}`, {status: status})
       .then((response: { data: any }) => response.data)
       .catch((error) => rejectWithValue(error.response.data));
   }
@@ -93,6 +114,46 @@ export const applicationsSlice = createSlice({
         state.error = action.payload;
       }
     )
+
+    builder.addCase(getCompanyApplications.pending, (state) => {
+      state.loading = true;
+    })
+    builder.addCase(
+      getCompanyApplications.fulfilled,
+      (state, { payload }: PayloadAction<any>) => {
+        return {...state, companyApplications: payload, loading: false}
+      }
+    )
+    builder.addCase(
+      getCompanyApplications.rejected, 
+      (state, action: PayloadAction<any>) => {
+        state.loading = false;
+        state.error = action.payload;
+      }
+    )
+    
+    builder.addCase(updateApplication.pending, (state) => {
+      state.loading = true;
+    })
+    builder.addCase(
+      updateApplication.fulfilled,
+      (state, { payload }: PayloadAction<any>) => {
+        let updatedApp = state.companyApplications.filter((app: any) => app.id === payload.data.id)[0]
+        let newApp = {...updatedApp, status: payload.data.status}
+        let apps = state.companyApplications.filter((app: any) => app.id !== payload.data.id)
+
+        return {...state, companyApplications: [...apps, newApp], loading: false}
+      }
+    )
+    builder.addCase(
+      updateApplication.rejected, 
+      (state, action: PayloadAction<any>) => {
+        state.loading = false;
+        state.error = action.payload;
+      }
+    )
+
+    builder.addCase(logout.fulfilled, () => initialState)
   }
 })
 
