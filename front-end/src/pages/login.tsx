@@ -49,7 +49,8 @@ const Login = () => {
       dispatch(cleanErrors())
       navigate('/') 
     } 
-  })
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [isLogged])
 
   const handleSubmit = (event: React.ChangeEvent<HTMLFormElement>) => {
     event.preventDefault()

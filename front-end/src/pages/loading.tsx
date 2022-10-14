@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import { useEffect } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import { RootState, AppDispatch } from "../store";
 import { useNavigate, Navigate } from "react-router-dom";
@@ -8,15 +8,13 @@ import { Box, LinearProgress } from "@mui/material/";
 import { fetchSectors } from "../store/sectorsSlice";
 
 const Loading = () => {
-  const { user, jobseeker, company, sectors } = useSelector(
-    (state: RootState) => state
-  );
-  const { token, id: userId, isLogged, hasProfile, role } = user;
+  const { user, jobseeker, company, sectors } = useSelector((state: RootState) => state);
+  const { id: userId, isLogged, hasProfile, role } = user;
   const dispatch: AppDispatch = useDispatch();
   const navigate = useNavigate();
 
   useEffect(() => {
-    dispatch(fetchSectors());
+    !sectors.sectors.length && dispatch(fetchSectors());
     !isLogged && navigate("/homePage");
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
@@ -25,13 +23,13 @@ const Loading = () => {
     (async () => {
       if (userId) {
         if (role === "jobseeker") {
-          if (hasProfile) {
+          if (hasProfile && !jobseeker.id) {
             await dispatch(getJobseekerProfile(userId));
           }
         }
 
         if (role === "company") {
-          if (hasProfile) {
+          if (hasProfile && !company.id) {
             await dispatch(getCompanyProfile(userId));
           }
         }
@@ -43,13 +41,13 @@ const Loading = () => {
   return (
     <Box sx={{ width: "50%", m: "auto", color: "#2b3247" }}>
       {user.role === "jobseeker" ? (
-        jobseeker.first_name ? (
+        jobseeker.id ? (
           <Navigate to="/jobs" />
         ) : (
           !user.hasProfile && <Navigate to="/jobseekerInfo" />
         )
       ) : user.role === "company" ? (
-        company.name ? (
+        company.id ? (
           <Navigate to="/companyDashboard" />
         ) : (
           !user.hasProfile && <Navigate to="/companyInfo" />
