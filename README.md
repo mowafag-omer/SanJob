@@ -45,8 +45,18 @@ yarn dev (or npm run dev)
 ```
 
 ## Screenshots
+- Home page
 
 ![Home page](/screenshots/homepage.png)
+
+- Signup
+
 ![Signup](/screenshots/signup.png)
+
+-Job offers
+
 ![Job offers](/screenshots/jobOffers.png)
+
+- Company posted jobs
+
 ![Company posted jobs](/screenshots/companyPostedJob.png)
