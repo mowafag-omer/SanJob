@@ -53,7 +53,7 @@ yarn dev (or npm run dev)
 
 ![Signup](/screenshots/signup.png)
 
--Job offers
+- Job offers
 
 ![Job offers](/screenshots/jobOffers.png)
 
