@@ -46,5 +46,7 @@ yarn dev (or npm run dev)
 
 ## Screenshots
 
-![Screenshot 1](/screenshots/screenshot1.png)
-![Screenshot 2](/screenshots/screenshot2.png)
+![Home page](/screenshots/homepage.png)
+![Signup](/screenshots/signup.png)
+![Job offers](/screenshots/jobOffers.png)
+![Company posted jobs](/screenshots/companyPostedJob.png)
